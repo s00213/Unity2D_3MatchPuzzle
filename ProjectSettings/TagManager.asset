@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Render
+  - alpha_cam
   layers:
   - Default
   - TransparentFX
@@ -38,6 +40,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1108106945
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Puzzle
+    uniqueID: 585479121
+    locked: 0
+  - name: Effect
+    uniqueID: 1451495555
     locked: 0
