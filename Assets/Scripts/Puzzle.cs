@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Puzzle : MonoBehaviour
 {
+    public Vector2Int posIndex;
+    public Board board;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +17,11 @@ public class Puzzle : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void PuzzleSetUp(Vector2Int pos, Board _board)
+    { 
+        posIndex = pos;
+        board = _board;
     }
 }

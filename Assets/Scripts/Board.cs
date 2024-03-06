@@ -12,9 +12,11 @@ public class Board : MonoBehaviour
 	public GameObject BackgroundTilePrefab;
 	
 	public Puzzle[] puzzles;
+	public Puzzle[,] allPuzzles;
 
 	void Start()
 	{
+		allPuzzles = new Puzzle[width, height];
 		BoardSetUp();
 	}
 
@@ -41,5 +43,8 @@ public class Board : MonoBehaviour
 		Puzzle puzzle = Instantiate(puzzleToSpawn, new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
 		puzzle.transform.parent = transform;
 		puzzle.name = "Puzzle - " + pos.x + ", " + pos.y;
+		allPuzzles[pos.x, pos.y] = puzzle;
+
+		puzzle.PuzzleSetUp(pos, this);
 	}
 }
