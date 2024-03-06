@@ -26,20 +26,20 @@ public class SoundManager : MonoBehaviour
 
 	void Awake()
 	{
-		SoundInit();
+		//SoundInit();
 	}
 
 	void Start()
 	{
-		if (!PlayerPrefs.HasKey("musicVolume"))
-		{
-			PlayerPrefs.SetFloat("musicVolume", 1);
-			Load();
-		}
-		else
-		{
-			Load();
-		}
+		//if (!PlayerPrefs.HasKey("musicVolume"))
+		//{
+		//	PlayerPrefs.SetFloat("musicVolume", 1);
+		//	Load();
+		//}
+		//else
+		//{
+		//	Load();
+		//}
 	}
 
 	void SoundInit()
