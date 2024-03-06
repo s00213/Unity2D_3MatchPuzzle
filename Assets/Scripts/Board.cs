@@ -10,6 +10,8 @@ public class Board : MonoBehaviour
 	public int height;
 
 	public GameObject BackgroundTilePrefab;
+	
+	public Puzzle[] puzzles;
 
 	void Start()
 	{
@@ -26,7 +28,18 @@ public class Board : MonoBehaviour
 				GameObject backgroundTile = Instantiate(BackgroundTilePrefab, pos, Quaternion.identity);
 				backgroundTile.transform.parent = transform;
 				backgroundTile.name = "BackgroundTile - " + x + ", " + y;
+
+				int puzzleToUse = Random.Range(0, puzzles.Length);
+
+				SpawnPuzzle(new Vector2Int(x, y), puzzles[puzzleToUse]);
 			}
 		}
-	}	
+	}
+
+	void SpawnPuzzle(Vector2Int pos, Puzzle puzzleToSpawn)
+	{
+		Puzzle puzzle = Instantiate(puzzleToSpawn, new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
+		puzzle.transform.parent = transform;
+		puzzle.name = "Puzzle - " + pos.x + ", " + pos.y;
+	}
 }
