@@ -6,13 +6,15 @@ using UnityEngine;
 // 게임 시작 시 보드 셋팅
 public class Board : MonoBehaviour
 {
+	[Header("Board")]
 	public int width;
 	public int height;
-
+	public float puzzleSpeed;
 	public GameObject BackgroundTilePrefab;
-	
+	[Space]
 	public Puzzle[] puzzles;
 	public Puzzle[,] allPuzzles;
+
 
 	void Start()
 	{

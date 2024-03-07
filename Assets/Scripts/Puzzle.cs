@@ -5,14 +5,20 @@ using UnityEngine.EventSystems;
 
 public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    public Vector2Int posIndex;
-    public Board board;
+	[Header("Puzzle")]
+	public Vector2Int posIndex;
+	public Board board;
 
-    Vector2 firstTouchPos;
-    Vector2 finalTouchPos;
+	Vector2 firstTouchPos;
+	Vector2 finalTouchPos;
 
-    float swipeAngle = 0;
-    Puzzle otherPuzzle;
+	float swipeAngle = 0;
+	Puzzle otherPuzzle;
+
+	void Update()
+	{ 
+		transform.position = Vector2.Lerp(transform.position, posIndex, board.puzzleSpeed * Time.deltaTime);
+	}
 
     public void PuzzleSetUp(Vector2Int pos, Board _board)
     {
