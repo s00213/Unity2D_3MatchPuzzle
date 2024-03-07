@@ -17,8 +17,6 @@ public class MatchManager : MonoBehaviour
 
 	public void MatchPuzzleType()
 	{
-		matchStatus.Clear();
-
 		for (int x = 0; x < board.width; x++)
 		{
 			for (int y = 0; y < board.height; y++)
