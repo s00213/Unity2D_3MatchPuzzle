@@ -13,9 +13,12 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public Board board;
 	public bool isMatched;
 
+	[HideInInspector]
+	public Vector2Int prePos;
+
 	Vector2 firstTouchPos;
 	Vector2 finalTouchPos;
-
+	
 	Puzzle otherPuzzle;
 	float swipeAngle = 0;
 
@@ -58,6 +61,8 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     void MovePuzzles()
     {
+		prePos = posIndex;
+
 		// 오른쪽 방향으로 교환할 때
 		if (swipeAngle < 45 && swipeAngle > -45 && posIndex.x < board.width - 1)
 		{
@@ -66,7 +71,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 			posIndex.x++;
 		}
 		// 왼쪽 방향으로 교환할 때
-		else if (swipeAngle > 135 || swipeAngle < -135 && posIndex.x > 0)
+		else if (swipeAngle > 135 && swipeAngle < -135 && posIndex.x > 0)
 		{
 			otherPuzzle = board.allPuzzles[posIndex.x - 1, posIndex.y];
 			otherPuzzle.posIndex.x++;
@@ -87,6 +92,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 			posIndex.y--;
 		}	
 
+		// 교환할 퍼즐이 없는 경우
 		if (otherPuzzle == null)
 		{
 			return;
@@ -94,6 +100,8 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 		board.allPuzzles[posIndex.x, posIndex.y] = this;
 		board.allPuzzles[otherPuzzle.posIndex.x, otherPuzzle.posIndex.y] = otherPuzzle;
+
+		StartCoroutine(CheckMoveRoutine());
 	}
 
 	void ExchangePuzzles()
@@ -107,6 +115,12 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 			transform.position = new Vector3(posIndex.x, posIndex.y, 0f);
 			board.allPuzzles[posIndex.x, posIndex.y] = this;
 		}
+	}
+
+	
+	IEnumerator CheckMoveRoutine()
+	{
+		yield return new WaitForSeconds(0.5f);
 	}
 }
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-// 게임 시작 시 보드 셋팅
 public class Board : MonoBehaviour
 {
 	[Header("Board")]
