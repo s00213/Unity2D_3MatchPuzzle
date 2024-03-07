@@ -18,6 +18,7 @@ public class FindMissing : MonoBehaviour
 			FindInSelected();
 		}
 	}
+
 	private static void FindInSelected()
 	{
 		GameObject[] go = Selection.gameObjects;
