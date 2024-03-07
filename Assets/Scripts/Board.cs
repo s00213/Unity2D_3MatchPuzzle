@@ -15,11 +15,23 @@ public class Board : MonoBehaviour
 	public Puzzle[] puzzles;
 	public Puzzle[,] allPuzzles;
 
+	MatchManager matchManager;
+
+	void Awake()
+	{
+		matchManager = FindObjectOfType<MatchManager>();
+	}
 
 	void Start()
 	{
 		allPuzzles = new Puzzle[width, height];
+		
 		BoardSetUp();
+	}
+
+	void Update()
+	{
+		matchManager.MatchPuzzleType();
 	}
 
 	void BoardSetUp()

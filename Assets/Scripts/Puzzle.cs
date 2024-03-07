@@ -5,15 +5,19 @@ using UnityEngine.EventSystems;
 
 public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
+	public enum PuzzleType { Bear, Chick, Crocodile, Narwhal, Panda, Parrot, Penguin, Pig }
+	public PuzzleType type;
+	 
 	[Header("Puzzle")]
 	public Vector2Int posIndex;
 	public Board board;
+	public bool isMatched;
 
 	Vector2 firstTouchPos;
 	Vector2 finalTouchPos;
 
-	float swipeAngle = 0;
 	Puzzle otherPuzzle;
+	float swipeAngle = 0;
 
 	void Update()
 	{
@@ -45,7 +49,6 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         swipeAngle = Mathf.Atan2(finalTouchPos.y - firstTouchPos.y, finalTouchPos.x - firstTouchPos.x);
         swipeAngle = swipeAngle * 180 / Mathf.PI;
         Debug.Log(swipeAngle);
-
 
         if (Vector3.Distance(firstTouchPos, finalTouchPos) > 0.5f)
         {
