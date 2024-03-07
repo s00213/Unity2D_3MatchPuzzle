@@ -18,9 +18,16 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 	Vector2 firstTouchPos;
 	Vector2 finalTouchPos;
-	
+
+	MatchManager matchManager;
 	Puzzle otherPuzzle;
+
 	float swipeAngle = 0;
+
+	void Awake()
+	{
+		matchManager = FindObjectOfType<MatchManager>();
+	}
 
 	void Update()
 	{
@@ -63,28 +70,43 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
 		prePos = posIndex;
 
-		// 오른쪽 방향으로 교환할 때
+		// 1. 오른쪽 방향으로 교환할 경우
+		// 터치의 각도가 -45에서 45도 사이일 때
+		// 퍼즐이 보드의 오른쪽 끝에 위치하지 않았을 때
+		// 퍼즐은 오른쪽으로 이동하게 되며, 오른쪽의 퍼즐은 현재 퍼즐의 위치로 이동함
 		if (swipeAngle < 45 && swipeAngle > -45 && posIndex.x < board.width - 1)
 		{
 			otherPuzzle = board.allPuzzles[posIndex.x + 1, posIndex.y];
 			otherPuzzle.posIndex.x--;
 			posIndex.x++;
 		}
-		// 왼쪽 방향으로 교환할 때
-		else if (swipeAngle > 135 && swipeAngle < -135 && posIndex.x > 0)
+		// 2. 왼쪽 방향으로 교환할 경우
+		// 터치의 각도가 135보다 크거나 -135보다 작을 때
+		// 퍼즐이 보드의 왼쪽 끝에 위치하지 않았을 때
+		// 퍼즐은 왼쪽으로 이동하게 되며, 왼쪽의 퍼즐은 현재 퍼즐의 위치로 이동함
+		else if (swipeAngle > 135 || swipeAngle < -135 && posIndex.x > 0)
 		{
+			if (posIndex.x <= 0)
+				return;
+
 			otherPuzzle = board.allPuzzles[posIndex.x - 1, posIndex.y];
 			otherPuzzle.posIndex.x++;
 			posIndex.x--;
 		}
-		// 위쪽 방향으로 교환할 때
+		// 3. 위쪽 방향으로 교환할 경우
+		// 터치의 각도가 45에서 135도 사이일 때
+		// 퍼즐이 보드의 맨 위에 위치하지 않았을 때
+		// 즐은 위쪽으로 이동하게 되며, 위쪽의 퍼즐은 현재 퍼즐의 위치로 이동함
 		else if (swipeAngle > 45 && swipeAngle <= 135 && posIndex.y < board.height - 1)
 		{
 			otherPuzzle = board.allPuzzles[posIndex.x, posIndex.y + 1];
 			otherPuzzle.posIndex.y--;
 			posIndex.y++;
 		}
-		// 아래쪽 방향으로 교환할 때
+		// 4. 아래쪽 방향으로 교환할 경우
+		// 터치의 각도가 -45에서 -135도 사이일 때
+		// 퍼즐이 보드의 맨 아래에 위치하지 않았을 때
+		// 퍼즐은 아래쪽으로 이동하게 되며, 아래쪽의 퍼즐은 현재 퍼즐의 위치로 이동함
 		else if (swipeAngle < -45 && swipeAngle >= -135 && posIndex.y > 0)
 		{
 			otherPuzzle = board.allPuzzles[posIndex.x, posIndex.y - 1];
@@ -94,9 +116,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 		// 교환할 퍼즐이 없는 경우
 		if (otherPuzzle == null)
-		{
 			return;
-		}
 
 		board.allPuzzles[posIndex.x, posIndex.y] = this;
 		board.allPuzzles[otherPuzzle.posIndex.x, otherPuzzle.posIndex.y] = otherPuzzle;
@@ -117,10 +137,31 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		}
 	}
 
-	
+	// 유효 교환인지 체크하는 코루틴
 	IEnumerator CheckMoveRoutine()
 	{
 		yield return new WaitForSeconds(0.5f);
+
+		matchManager.MatchPuzzleType();
+
+		if (otherPuzzle != null)
+		{
+			// 현재 퍼즐과 이동된 위치에 있는 다른 퍼즐이 모두 일치하지 않은 경우
+			if (!isMatched && !otherPuzzle.isMatched)
+			{
+				// 퍼즐의 위치를 서로 바꿈
+				otherPuzzle.posIndex = posIndex;
+				// 퍼즐의 위치를 원래대로 함
+				posIndex = prePos;
+
+				// 보드 배열에서 퍼즐의 위치 정보를 갱신
+				board.allPuzzles[posIndex.x, posIndex.y] = this;
+				// 보드 배열에서 이동된 위치에 있는 다른 퍼즐의 위치 정보를 갱신
+				board.allPuzzles[otherPuzzle.posIndex.x, otherPuzzle.posIndex.y] = otherPuzzle;
+
+				yield return new WaitForSeconds(0.5f);
+			}
+		}
 	}
 }
 
