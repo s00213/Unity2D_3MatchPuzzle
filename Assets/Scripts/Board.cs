@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Board : MonoBehaviour
 {
@@ -9,21 +10,27 @@ public class Board : MonoBehaviour
 	public BoardStatus curStatus = BoardStatus.Move; //  게임 시작 시에는 Move여야 함
 
 	List<Puzzle> findPuzzles = new List<Puzzle>();
+	List<Puzzle> puzzlesFromBoard = new List<Puzzle>();
+	List<Puzzle> tempPuzzles = new List<Puzzle>();
 
 	[Header("Board")]
 	public int width;
 	public int height;
 	public float puzzleSpeed;
 	public GameObject BackgroundTilePrefab;
+	public Button shuffleButton;
 	[Space]
 	public Puzzle[] puzzles;
 	public Puzzle[,] allPuzzles;
 
 	MatchManager matchManager;
+	RoundManager roundManager;
 
 	int iteration = 0; // 반복
 	int nullCount = 0; // 연속된 빈 공간의 수
 	int puzzleToUse; // 사용할 퍼즐
+
+	int shuffleCount = 0; // 셔플 횟수를 저장하는 변수
 
 	void Awake()
 	{
@@ -239,4 +246,60 @@ public class Board : MonoBehaviour
 			Destroy(g.gameObject);
 		}
 	}
+
+	public void ShufflePuzzles()
+	{
+		if (curStatus != BoardStatus.Idle)
+		{
+			curStatus = BoardStatus.Idle;
+
+			// 세 번까지만 실행되도록 제한함
+			if (shuffleCount < 3)
+			{
+				for (int x = 0; x < width; x++)
+				{
+					for (int y = 0; y < height; y++)
+					{
+						// 현재 위치의 퍼즐을 리스트에 추가하고 배열에서 비우게 함
+						tempPuzzles.Add(allPuzzles[x, y]);
+						allPuzzles[x, y] = null;
+					}
+				}
+
+				for (int x = 0; x < width; x++)
+				{
+					for (int y = 0; y < height; y++)
+					{
+						// 랜덤으로 퍼즐을 선택함
+						puzzleToUse = Random.Range(0, tempPuzzles.Count);
+
+						// 동일한 종류의 퍼즐을 선택하는 경우 최대 100번까지 재시도함
+						iteration = 0;
+						while (MatchSamePuzzles(new Vector2Int(x, y), tempPuzzles[puzzleToUse]) && iteration < 100 && tempPuzzles.Count > 1)
+						{
+							puzzleToUse = Random.Range(0, tempPuzzles.Count);
+							iteration++;
+						}
+
+						// 선택된 퍼즐을 현재 위치에 배치하고 정보를 설정함
+						tempPuzzles[puzzleToUse].PuzzleSetUp(new Vector2Int(x, y), this);
+						allPuzzles[x, y] = tempPuzzles[puzzleToUse];
+
+						// 셔플 이후에 해당 퍼즐을 tempPuzzles 리스트에서 제거하여 중복을 방지함
+						tempPuzzles.RemoveAt(puzzleToUse);
+					}
+				}
+
+				shuffleCount++;
+
+				if (shuffleCount >= 3)
+				{
+					shuffleButton.gameObject.SetActive(false);
+				}
+			}
+
+			StartCoroutine(RefillPuzzlesRoutine());
+		}
+	}
 }
+
