@@ -154,9 +154,9 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 				// 퍼즐의 위치를 원래대로 함
 				posIndex = prePos;
 
-				// 보드 배열에서 퍼즐의 위치 정보를 갱신
+				// 보드 배열에서 퍼즐의 위치 정보를 갱신함
 				board.allPuzzles[posIndex.x, posIndex.y] = this;
-				// 보드 배열에서 이동된 위치에 있는 다른 퍼즐의 위치 정보를 갱신
+				// 보드 배열에서 이동된 위치에 있는 다른 퍼즐의 위치 정보를 갱신함
 				board.allPuzzles[otherPuzzle.posIndex.x, otherPuzzle.posIndex.y] = otherPuzzle;
 
 				yield return new WaitForSeconds(0.5f);

@@ -16,6 +16,8 @@ public class Board : MonoBehaviour
 
 	MatchManager matchManager;
 
+	int iteration = 0;
+
 	void Awake()
 	{
 		matchManager = FindObjectOfType<MatchManager>();
@@ -42,9 +44,20 @@ public class Board : MonoBehaviour
 				Vector2 pos = new Vector2(x, y);
 				GameObject backgroundTile = Instantiate(BackgroundTilePrefab, pos, Quaternion.identity);
 				backgroundTile.transform.parent = transform;
-				backgroundTile.name = "BackgroundTile - " + x + ", " + y;
+				backgroundTile.name = "BackgroundTile : " + x + ", " + y;
 
 				int puzzleToUse = Random.Range(0, puzzles.Length);
+
+				while (MatchSamePuzzle(new Vector2Int(x,y), puzzles[puzzleToUse]) && iteration < 100)
+				{
+					puzzleToUse = Random.Range(0, puzzles.Length);
+					iteration++;
+
+					if (iteration > 0)
+					{
+						Debug.Log(iteration);
+					}
+				}
 
 				SpawnPuzzle(new Vector2Int(x, y), puzzles[puzzleToUse]);
 			}
@@ -59,5 +72,27 @@ public class Board : MonoBehaviour
 		allPuzzles[pos.x, pos.y] = puzzle;
 
 		puzzle.PuzzleSetUp(pos, this);
+	}
+
+	// 가로 또는 세로 방향으로 일치하는 보석이 있는지를 확인
+	bool MatchSamePuzzle(Vector2Int checkPos, Puzzle checkPuzzle)
+	{
+		if (checkPos.x > 1)
+		{
+			if (allPuzzles[checkPos.x - 1, checkPos.y].type == checkPuzzle.type && allPuzzles[checkPos.x - 2, checkPos.y].type == checkPuzzle.type)
+			{ 
+				return true;
+			}
+		}
+
+		if (checkPos.y > 1)
+		{
+			if (allPuzzles[checkPos.x, checkPos.y - 1].type == checkPuzzle.type && allPuzzles[checkPos.x, checkPos.y - 2].type == checkPuzzle.type)
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

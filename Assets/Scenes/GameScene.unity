@@ -169,7 +169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 5
   height: 8
-  puzzleSpeed: 7
+  puzzleSpeed: 10
   BackgroundTilePrefab: {fileID: 1903346692537623246, guid: 147a3d6d31076914fb73c2cef7cfa935, type: 3}
   puzzles:
   - {fileID: 1003480595377931992, guid: 42fca94760e50e6409eafff26850c122, type: 3}
@@ -344,6 +344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 573920bf9cf9e4e41bab3207d29f8553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  matchStatus: []
 --- !u!4 &1061938299
 Transform:
   m_ObjectHideFlags: 0
