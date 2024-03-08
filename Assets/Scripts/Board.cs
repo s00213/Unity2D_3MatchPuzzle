@@ -17,6 +17,7 @@ public class Board : MonoBehaviour
 	MatchManager matchManager;
 
 	int iteration = 0;
+	int nullCount = 0; // 연속된 빈 공간의 수
 
 	void Awake()
 	{
@@ -48,7 +49,7 @@ public class Board : MonoBehaviour
 
 				int puzzleToUse = Random.Range(0, puzzles.Length);
 
-				while (MatchSamePuzzles(new Vector2Int(x,y), puzzles[puzzleToUse]) && iteration < 100)
+				while (MatchSamePuzzles(new Vector2Int(x, y), puzzles[puzzleToUse]) && iteration < 100)
 				{
 					puzzleToUse = Random.Range(0, puzzles.Length);
 					iteration++;
@@ -118,6 +119,40 @@ public class Board : MonoBehaviour
 			{
 				DestroySamePuzzles(matchManager.matchStatus[i].posIndex);
 			}
+		}
+
+		StartCoroutine(FallPuzzleRoutine());
+	}
+
+	// 빈 공간이 생기면 해당 열의 모든 퍼즐을 아래로 이동
+	IEnumerator FallPuzzleRoutine()
+	{
+		yield return new WaitForSeconds(0.1f);
+
+		for (int x = 0; x < width; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				// 현재 위치에 퍼즐이 없다면
+				if (allPuzzles[x, y] == null)
+				{
+					// nullCount 증가
+					nullCount++;
+				}
+				// nullCount가 있다면
+				else if (nullCount > 0)
+				{
+					// nullCount만큼 해당 y 위치의 퍼즐 오브젝트를 내려보냄
+					allPuzzles[x, y].posIndex.y -= nullCount;
+					// 내린 위치에 퍼즐의 위치 정보도 내려보냄
+					allPuzzles[x, y - nullCount] = allPuzzles[x, y];
+					// 원래 위치의 퍼즐은 null이 되도록 함
+					allPuzzles[x, y] = null;
+				}
+			}
+
+			// nullCount 0으로 초기화
+			nullCount = 0;
 		}
 	}
 }
