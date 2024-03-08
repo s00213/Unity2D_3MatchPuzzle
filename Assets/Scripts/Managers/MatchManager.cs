@@ -17,17 +17,21 @@ public class MatchManager : MonoBehaviour
 
 	public void MatchPuzzleType()
 	{
+		matchStatus.Clear();
+
 		for (int x = 0; x < board.width; x++)
 		{
 			for (int y = 0; y < board.height; y++)
 			{
 				curPuzzle = board.allPuzzles[x, y];
+
 				if (curPuzzle != null)
 				{
 					if (x > 0 && x < board.width - 1)
 					{
 						leftPuzzle = board.allPuzzles[x - 1, y];
 						rightPuzzle = board.allPuzzles[x + 1, y];
+
 						if (leftPuzzle != null && rightPuzzle != null)
 						{
 							if (leftPuzzle.type == curPuzzle.type && rightPuzzle.type == curPuzzle.type)
@@ -48,6 +52,7 @@ public class MatchManager : MonoBehaviour
 				{
 					upPuzzle = board.allPuzzles[x, y + 1];
 					downPuzzle = board.allPuzzles[x, y - 1];
+
 					if (upPuzzle != null && downPuzzle != null)
 					{
 						if (upPuzzle.type == curPuzzle.type && downPuzzle.type == curPuzzle.type)

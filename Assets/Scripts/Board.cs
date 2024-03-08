@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
+	List<Puzzle> findPuzzles = new List<Puzzle>();
+
 	[Header("Board")]
 	public int width;
 	public int height;
@@ -34,7 +36,7 @@ public class Board : MonoBehaviour
 
 	void Update()
 	{
-		matchManager.MatchPuzzleType();
+		//matchManager.MatchPuzzleType();
 	}
 
 	void BoardSetUp()
@@ -184,6 +186,7 @@ public class Board : MonoBehaviour
 		}
 	}
 
+	// 비어있는 위치에 퍼즐을 채움
 	void RefillPuzzles()
 	{
 		for (int x = 0; x < width; x++)
@@ -199,6 +202,33 @@ public class Board : MonoBehaviour
 					SpawnPuzzles(new Vector2Int(x, y), puzzles[puzzleToUse]);
 				}
 			}
+		}
+
+		CheckMisplacePuzzles();
+	}
+
+	// 잘못된 위치에 배치된 퍼즐을 확인하여 제거함
+	void CheckMisplacePuzzles()
+	{
+		// findPuzzles 리스트에 찾은 모든 Puzzle 오브젝트를 추가함
+		findPuzzles.AddRange(FindObjectsOfType<Puzzle>());
+
+		for (int x = 0; x < width; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				// 현재 위치에 있는 퍼즐이 findPuzzles 리스트에 포함되어 있다면 삭제함
+				if (findPuzzles.Contains(allPuzzles[x, y]))
+				{
+					findPuzzles.Remove(allPuzzles[x, y]);
+				}
+			}
+		}
+
+		// findPuzzles 리스트에 남아있다면 게임 오브젝트를 삭제를 반복함
+		foreach (Puzzle g in findPuzzles)
+		{
+			Destroy(g.gameObject);
 		}
 	}
 }

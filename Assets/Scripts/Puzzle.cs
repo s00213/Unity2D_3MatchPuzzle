@@ -133,11 +133,8 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		}
 		else
 		{
-			//transform.position = new Vector3(posIndex.x, posIndex.y, 0f);
-			//board.allPuzzles[posIndex.x, posIndex.y] = this;
-			transform.position = new Vector3(posIndex.x, posIndex.y, 0f);
-			//board.allPuzzles[(int)posIndex.x, (int)posIndex.y] = this;
-			board.allPuzzles[posIndex.x, posIndex.y] = this;
+			transform.position = new Vector2(posIndex.x, posIndex.y);
+			board.allPuzzles[(int)posIndex.x, (int)posIndex.y] = this;
 		}
 	}
 
