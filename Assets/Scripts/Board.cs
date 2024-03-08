@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
+	public enum BoardStatus { Move, Wait}
+	public BoardStatus curStatus = BoardStatus.Move; // 게임 시작하자마자 움직여야 함
+
 	List<Puzzle> findPuzzles = new List<Puzzle>();
 
 	[Header("Board")]
@@ -32,11 +35,6 @@ public class Board : MonoBehaviour
 		allPuzzles = new Puzzle[width, height];
 
 		BoardSetUp();
-	}
-
-	void Update()
-	{
-		//matchManager.MatchPuzzleType();
 	}
 
 	void BoardSetUp()
@@ -73,6 +71,7 @@ public class Board : MonoBehaviour
 	void SpawnPuzzles(Vector2Int pos, Puzzle puzzleToSpawn)
 	{
 		Puzzle puzzle = Instantiate(puzzleToSpawn, new Vector3(pos.x, pos.y + height, 0f), Quaternion.identity);
+
 		puzzle.transform.parent = transform;
 		puzzle.name = "Puzzle - " + pos.x + ", " + pos.y;
 		allPuzzles[pos.x, pos.y] = puzzle;
@@ -171,6 +170,7 @@ public class Board : MonoBehaviour
 	IEnumerator RefillPuzzlesRoutine()
 	{
 		yield return new WaitForSeconds(0.2f);
+		
 		RefillPuzzles();
 
 		yield return new WaitForSeconds(0.2f);
@@ -183,6 +183,12 @@ public class Board : MonoBehaviour
 			yield return new WaitForSeconds(1.0f);
 			// 매치된 퍼즐들 삭제
 			DestroyMatch();
+		}
+		else 
+		{
+			yield return new WaitForSeconds(0.2f);
+
+			curStatus = Board.BoardStatus.Move;
 		}
 	}
 

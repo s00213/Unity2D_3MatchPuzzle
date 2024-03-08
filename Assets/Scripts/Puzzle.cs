@@ -43,15 +43,23 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	// 포인터가 오브젝트 위에서 눌렸을 때 호출됨
 	public void OnPointerDown(PointerEventData eventData)
 	{
-		firstTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		Debug.Log("Down");
+		if (board.curStatus == Board.BoardStatus.Move)
+		{
+			firstTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			Debug.Log("Down");
+		}
+			
 	}
 
 	// 포인터를 뗄 때 호출됨
 	public void OnPointerUp(PointerEventData eventData)
 	{
-		finalTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		CalculateSwipeAngle();
+		if (board.curStatus == Board.BoardStatus.Move)
+		{
+			finalTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			
+			CalculateSwipeAngle();
+		}
 	}
 
 	void CalculateSwipeAngle()
@@ -141,6 +149,8 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	// 유효 교환인지 체크하는 코루틴
 	IEnumerator CheckMoveRoutine()
 	{
+		board.curStatus = Board.BoardStatus.Wait;
+
 		yield return new WaitForSeconds(0.5f);
 
 		matchManager.MatchPuzzleType();
@@ -161,6 +171,8 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 				board.allPuzzles[otherPuzzle.posIndex.x, otherPuzzle.posIndex.y] = otherPuzzle;
 
 				yield return new WaitForSeconds(0.5f);
+
+				board.curStatus = Board.BoardStatus.Move;
 			}
 			else
 			{
