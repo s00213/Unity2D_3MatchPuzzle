@@ -161,6 +161,10 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 				yield return new WaitForSeconds(0.5f);
 			}
+			else
+			{
+				board.DestroyMatch();
+			}
 		}
 	}
 }

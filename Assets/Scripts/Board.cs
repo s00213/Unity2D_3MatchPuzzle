@@ -48,7 +48,7 @@ public class Board : MonoBehaviour
 
 				int puzzleToUse = Random.Range(0, puzzles.Length);
 
-				while (MatchSamePuzzle(new Vector2Int(x,y), puzzles[puzzleToUse]) && iteration < 100)
+				while (MatchSamePuzzles(new Vector2Int(x,y), puzzles[puzzleToUse]) && iteration < 100)
 				{
 					puzzleToUse = Random.Range(0, puzzles.Length);
 					iteration++;
@@ -75,7 +75,7 @@ public class Board : MonoBehaviour
 	}
 
 	// 가로 또는 세로 방향으로 일치하는 보석이 있는지를 확인
-	bool MatchSamePuzzle(Vector2Int checkPos, Puzzle checkPuzzle)
+	bool MatchSamePuzzles(Vector2Int checkPos, Puzzle checkPuzzle)
 	{
 		if (checkPos.x > 1)
 		{
@@ -94,5 +94,30 @@ public class Board : MonoBehaviour
 		}
 
 		return false;
+	}
+
+	// 매치된 상태인 퍼즐 오브젝트를 삭제하고 배열에서 해당 퍼즐 위치를 null이 되도록 함
+	void DestroySamePuzzles(Vector2Int pos)
+	{
+		if (allPuzzles[pos.x, pos.y] != null)
+		{
+			if (allPuzzles[pos.x, pos.y].isMatched)
+			{
+				Destroy(allPuzzles[pos.x, pos.y].gameObject);
+				allPuzzles[pos.x, pos.y] = null;
+			}
+		}
+	}
+
+	// Match Status 리스트에 저장된 위치를 기반으로 퍼즐 오브젝트를 삭제함
+	public void DestroyMatch()
+	{ 
+		for (int i = 0; i < matchManager.matchStatus.Count; i++) 
+		{
+			if (matchManager.matchStatus[i] != null)
+			{
+				DestroySamePuzzles(matchManager.matchStatus[i].posIndex);
+			}
+		}
 	}
 }
