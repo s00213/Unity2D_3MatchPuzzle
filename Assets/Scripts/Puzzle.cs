@@ -7,7 +7,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
 	public enum PuzzleType { Bear, Chick, Crocodile, Narwhal, Panda, Parrot, Penguin, Pig }
 	public PuzzleType type;
-	 
+
 	[Header("Puzzle")]
 	public Vector2Int posIndex;
 	public Board board;
@@ -32,42 +32,42 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	void Update()
 	{
 		ExchangePuzzles();
-	}	
-		
-    public void PuzzleSetUp(Vector2Int pos, Board _board)
-    {
-        posIndex = pos;
-        board = _board;
-    }
+	}
 
-    // 포인터가 오브젝트 위에서 눌렸을 때 호출됨
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        firstTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+	public void PuzzleSetUp(Vector2Int pos, Board _board)
+	{
+		posIndex = pos;
+		board = _board;
+	}
+
+	// 포인터가 오브젝트 위에서 눌렸을 때 호출됨
+	public void OnPointerDown(PointerEventData eventData)
+	{
+		firstTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		Debug.Log("Down");
 	}
 
 	// 포인터를 뗄 때 호출됨
 	public void OnPointerUp(PointerEventData eventData)
-    {
-        finalTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        CalculateSwipeAngle();
-    }
+	{
+		finalTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		CalculateSwipeAngle();
+	}
 
-    void CalculateSwipeAngle()
-    {
-        swipeAngle = Mathf.Atan2(finalTouchPos.y - firstTouchPos.y, finalTouchPos.x - firstTouchPos.x);
-        swipeAngle = swipeAngle * 180 / Mathf.PI;
-        Debug.Log(swipeAngle);
+	void CalculateSwipeAngle()
+	{
+		swipeAngle = Mathf.Atan2(finalTouchPos.y - firstTouchPos.y, finalTouchPos.x - firstTouchPos.x);
+		swipeAngle = swipeAngle * 180 / Mathf.PI;
+		Debug.Log(swipeAngle);
 
-        if (Vector3.Distance(firstTouchPos, finalTouchPos) > 0.5f)
-        {
+		if (Vector3.Distance(firstTouchPos, finalTouchPos) > 0.5f)
+		{
 			MovePuzzles();
 		}
 	}
 
-    void MovePuzzles()
-    {
+	void MovePuzzles()
+	{
 		prePos = posIndex;
 
 		// 1. 오른쪽 방향으로 교환할 경우
@@ -112,7 +112,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 			otherPuzzle = board.allPuzzles[posIndex.x, posIndex.y - 1];
 			otherPuzzle.posIndex.y++;
 			posIndex.y--;
-		}	
+		}
 
 		// 교환할 퍼즐이 없는 경우
 		if (otherPuzzle == null)
@@ -125,14 +125,18 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	}
 
 	void ExchangePuzzles()
-	{		
-		if (Vector2.Distance(transform.position, posIndex) > .01f)
+	{
+		if (Vector2.Distance(transform.position, posIndex) > 0.01f)
 		{
+			// 현재 위치에서 목표 위치로 일정 속도(board.puzzleSpeed)로 이동함
 			transform.position = Vector2.Lerp(transform.position, posIndex, board.puzzleSpeed * Time.deltaTime);
 		}
 		else
 		{
+			//transform.position = new Vector3(posIndex.x, posIndex.y, 0f);
+			//board.allPuzzles[posIndex.x, posIndex.y] = this;
 			transform.position = new Vector3(posIndex.x, posIndex.y, 0f);
+			//board.allPuzzles[(int)posIndex.x, (int)posIndex.y] = this;
 			board.allPuzzles[posIndex.x, posIndex.y] = this;
 		}
 	}
