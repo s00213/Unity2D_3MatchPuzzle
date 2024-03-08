@@ -72,7 +72,7 @@ public class Board : MonoBehaviour
 
 	void SpawnPuzzles(Vector2Int pos, Puzzle puzzleToSpawn)
 	{
-		Puzzle puzzle = Instantiate(puzzleToSpawn, new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
+		Puzzle puzzle = Instantiate(puzzleToSpawn, new Vector3(pos.x, pos.y + height, 0f), Quaternion.identity);
 		puzzle.transform.parent = transform;
 		puzzle.name = "Puzzle - " + pos.x + ", " + pos.y;
 		allPuzzles[pos.x, pos.y] = puzzle;
