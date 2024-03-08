@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
-	public enum BoardStatus { Move, Wait}
-	public BoardStatus curStatus = BoardStatus.Move; // 게임 시작하자마자 움직여야 함
+	public enum BoardStatus { Idle, Move }
+	public BoardStatus curStatus = BoardStatus.Move; //  게임 시작 시에는 Move여야 함
 
 	List<Puzzle> findPuzzles = new List<Puzzle>();
 
@@ -113,6 +113,8 @@ public class Board : MonoBehaviour
 		{
 			if (allPuzzles[pos.x, pos.y].isMatched)
 			{
+				Instantiate(allPuzzles[pos.x, pos.y].destroyEffect, new Vector2(pos.x, pos.y), Quaternion.identity);
+
 				Destroy(allPuzzles[pos.x, pos.y].gameObject);
 				allPuzzles[pos.x, pos.y] = null;
 			}
@@ -136,7 +138,7 @@ public class Board : MonoBehaviour
 	// 빈 공간이 생기면 해당 y 위치의 모든 퍼즐을 아래로 이동
 	IEnumerator FallPuzzlesRoutine()
 	{
-		yield return new WaitForSeconds(0.2f);
+		yield return new WaitForSeconds(0.3f);
 
 		for (int x = 0; x < width; x++)
 		{
@@ -169,11 +171,11 @@ public class Board : MonoBehaviour
 
 	IEnumerator RefillPuzzlesRoutine()
 	{
-		yield return new WaitForSeconds(0.2f);
+		yield return new WaitForSeconds(0.3f);
 		
 		RefillPuzzles();
 
-		yield return new WaitForSeconds(0.2f);
+		yield return new WaitForSeconds(0.3f);
 
 		matchManager.MatchPuzzleType();
 
@@ -186,7 +188,7 @@ public class Board : MonoBehaviour
 		}
 		else 
 		{
-			yield return new WaitForSeconds(0.2f);
+			yield return new WaitForSeconds(0.3f);
 
 			curStatus = Board.BoardStatus.Move;
 		}

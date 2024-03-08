@@ -12,6 +12,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public Vector2Int posIndex;
 	public Board board;
 	public bool isMatched;
+	public GameObject destroyEffect;
 
 	[HideInInspector]
 	public Vector2Int prePos;
@@ -44,11 +45,10 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public void OnPointerDown(PointerEventData eventData)
 	{
 		if (board.curStatus == Board.BoardStatus.Move)
-		{
+   		{
 			firstTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			Debug.Log("Down");
-		}
-			
+		}					
 	}
 
 	// 포인터를 뗄 때 호출됨
@@ -57,21 +57,20 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		if (board.curStatus == Board.BoardStatus.Move)
 		{
 			finalTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			
 			CalculateSwipeAngle();
-		}
+		}		
 	}
 
 	void CalculateSwipeAngle()
 	{
 		swipeAngle = Mathf.Atan2(finalTouchPos.y - firstTouchPos.y, finalTouchPos.x - firstTouchPos.x);
 		swipeAngle = swipeAngle * 180 / Mathf.PI;
-		Debug.Log(swipeAngle);
+		Debug.Log("Swipe Angle : " + swipeAngle);
 
 		if (Vector3.Distance(firstTouchPos, finalTouchPos) > 0.5f)
 		{
 			MovePuzzles();
-		}
+		}	
 	}
 
 	void MovePuzzles()
@@ -141,15 +140,18 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		}
 		else
 		{
-			transform.position = new Vector2(posIndex.x, posIndex.y);
-			board.allPuzzles[(int)posIndex.x, (int)posIndex.y] = this;
+			//transform.position = new Vector2(posIndex.x, posIndex.y);
+			//board.allPuzzles[(int)posIndex.x, (int)posIndex.y] = this;
+
+			transform.position = new Vector3(posIndex.x, posIndex.y, 0f);
+			board.allPuzzles[posIndex.x, posIndex.y] = this;
 		}
 	}
 
 	// 유효 교환인지 체크하는 코루틴
 	IEnumerator CheckMoveRoutine()
 	{
-		board.curStatus = Board.BoardStatus.Wait;
+		board.curStatus = Board.BoardStatus.Idle;
 
 		yield return new WaitForSeconds(0.5f);
 
