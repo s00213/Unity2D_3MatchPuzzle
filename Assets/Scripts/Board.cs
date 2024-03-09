@@ -10,7 +10,6 @@ public class Board : MonoBehaviour
 	public BoardStatus curStatus = BoardStatus.Move; //  게임 시작 시에는 Move여야 함
 
 	List<Puzzle> findPuzzles = new List<Puzzle>();
-	List<Puzzle> puzzlesFromBoard = new List<Puzzle>();
 	List<Puzzle> tempPuzzles = new List<Puzzle>();
 
 	[Header("Board")]
@@ -29,7 +28,6 @@ public class Board : MonoBehaviour
 	int iteration = 0; // 반복
 	int nullCount = 0; // 연속된 빈 공간의 수
 	int puzzleToUse; // 사용할 퍼즐
-
 	int shuffleCount = 0; // 셔플 횟수를 저장하는 변수
 
 	void Awake()
