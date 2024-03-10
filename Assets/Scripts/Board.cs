@@ -33,6 +33,7 @@ public class Board : MonoBehaviour
 	void Awake()
 	{
 		matchManager = FindObjectOfType<MatchManager>();
+		roundManager = FindObjectOfType<RoundManager>();
 	}
 
 	void Start()
@@ -133,6 +134,8 @@ public class Board : MonoBehaviour
 		{
 			if (matchManager.matchStatus[i] != null)
 			{
+				CheckScore(matchManager.matchStatus[i]);
+
 				DestroySamePuzzles(matchManager.matchStatus[i].posIndex);
 			}
 		}
@@ -298,6 +301,12 @@ public class Board : MonoBehaviour
 
 			StartCoroutine(RefillPuzzlesRoutine());
 		}
+	}
+
+	// 퍼즐의 스코어를 확인하고 현재 스코어를 업데이트함
+	public void CheckScore(Puzzle puzzleToCheck)
+	{
+		roundManager.curScore += puzzleToCheck.scoreValue;
 	}
 }
 

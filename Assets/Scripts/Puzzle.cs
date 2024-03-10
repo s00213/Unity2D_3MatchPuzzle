@@ -13,6 +13,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public Board board;
 	public bool isMatched;
 	public GameObject destroyEffect;
+	public int scoreValue = 10;
 
 	[HideInInspector]
 	public Vector2Int prePos;
@@ -21,6 +22,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	Vector2 finalTouchPos;
 
 	MatchManager matchManager;
+	RoundManager roundManager;
 	Puzzle otherPuzzle;
 
 	float swipeAngle = 0;
@@ -28,6 +30,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	void Awake()
 	{
 		matchManager = FindObjectOfType<MatchManager>();
+		roundManager = FindObjectOfType<RoundManager>();
 	}
 
 	void Update()
@@ -44,7 +47,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	// 포인터가 오브젝트 위에서 눌렸을 때 호출됨
 	public void OnPointerDown(PointerEventData eventData)
 	{
-		if (board.curStatus == Board.BoardStatus.Move)
+		if (board.curStatus == Board.BoardStatus.Move && roundManager.roundTime > 0)
    		{
 			firstTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			Debug.Log("Down");
@@ -54,7 +57,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	// 포인터를 뗄 때 호출됨
 	public void OnPointerUp(PointerEventData eventData)
 	{
-		if (board.curStatus == Board.BoardStatus.Move)
+		if (board.curStatus == Board.BoardStatus.Move && roundManager.roundTime > 0)
 		{
 			finalTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			CalculateSwipeAngle();
