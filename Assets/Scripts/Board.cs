@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR;
 
 public class Board : MonoBehaviour
 {
@@ -29,6 +30,8 @@ public class Board : MonoBehaviour
 	int nullCount = 0; // 연속된 빈 공간의 수
 	int puzzleToUse; // 사용할 퍼즐
 	int shuffleCount = 0; // 셔플 횟수를 저장하는 변수
+	float multipleBonus;
+	float bonusAmount = 0.5f;
 
 	void Awake()
 	{
@@ -190,6 +193,9 @@ public class Board : MonoBehaviour
 		// matchStatus 리스트에 일치하는 퍼즐이 하나 이상 있는 경우
 		if (matchManager.matchStatus.Count > 0)
 		{
+			// 일치하는 퍼즐이 있으면 multipleBonus 값을 증가
+			multipleBonus++;	
+
 			yield return new WaitForSeconds(1.0f);
 			// 매치된 퍼즐들 삭제
 			DestroyMatch();
@@ -199,6 +205,9 @@ public class Board : MonoBehaviour
 			yield return new WaitForSeconds(0.3f);
 
 			curStatus = Board.BoardStatus.Move;
+
+			// multipleBonus 값을 초기화함
+			multipleBonus = 0f;
 		}
 	}
 
@@ -307,6 +316,15 @@ public class Board : MonoBehaviour
 	public void CheckScore(Puzzle puzzleToCheck)
 	{
 		roundManager.curScore += puzzleToCheck.scoreValue;
+
+		// multipleBonus 적용된 경우
+		if (multipleBonus > 0)
+		{
+			// multipleBonus에 따라 추가될 bonusAmount를 계산함
+			float bonusToAdd = puzzleToCheck.scoreValue * multipleBonus * bonusAmount;
+			// 보너스 값을 반올림하여 curScore에 더함
+			roundManager.curScore += Mathf.RoundToInt(bonusToAdd);
+		}
 	}
 }
 
