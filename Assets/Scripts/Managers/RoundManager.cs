@@ -9,6 +9,8 @@ public class RoundManager : MonoBehaviour
 	[Header("Text")]
 	public TextMeshProUGUI timeText;
 	public TextMeshProUGUI scoreText;
+	public TextMeshProUGUI resultScoreText;
+	public GameObject star0, star1, stars2, stars3;
 	[Header("Timer")]
 	public float roundTime = 60f;
 	public Slider timerSlider;
@@ -16,6 +18,7 @@ public class RoundManager : MonoBehaviour
 	public int curScore;
 	public float displayScore;
 	public float scoreSpeed; //스코어가 업데이트되는 속도
+	public int scoreTarget1, scoreTarget2, scoreTarget3;
 	[Header("Game Over")]
 	public GameObject ResultUI;
 
@@ -26,6 +29,14 @@ public class RoundManager : MonoBehaviour
 	void Awake()
 	{
 		board = FindObjectOfType<Board>();
+	}
+
+	private void Start()
+	{
+		star0.SetActive(false);
+		star1.SetActive(false);
+		stars2.SetActive(false);
+		stars3.SetActive(false);
 	}
 
 	void Update()
@@ -66,15 +77,34 @@ public class RoundManager : MonoBehaviour
 		timeText.text = "Time : " + roundTime.ToString("0.0") + "s";
 	}
 
-	void CheckResult()
-	{
-		ResultUI.SetActive(true);
-	}
-
 	void DisplayScore()
 	{
 		displayScore = Mathf.Lerp(displayScore, curScore, scoreSpeed * Time.deltaTime);
 
 		scoreText.text = "Score : " + displayScore.ToString("0");
+	}
+
+	void CheckResult()
+	{
+		ResultUI.SetActive(true);
+
+		resultScoreText.text = curScore.ToString();
+
+		if (curScore >= scoreTarget3)
+		{
+			stars3.SetActive(true);
+		}
+		else if (curScore >= scoreTarget2)
+		{
+			stars2.SetActive(true);
+		}
+		else if (curScore >= scoreTarget1)
+		{
+			star1.SetActive(true);
+		}
+		else
+		{
+			star0.SetActive(true);
+		}
 	}
 }

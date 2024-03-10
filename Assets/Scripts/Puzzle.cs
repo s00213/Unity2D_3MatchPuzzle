@@ -48,10 +48,10 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public void OnPointerDown(PointerEventData eventData)
 	{
 		if (board.curStatus == Board.BoardStatus.Move && roundManager.roundTime > 0)
-   		{
+		{
 			firstTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			Debug.Log("Down");
-		}					
+		}
 	}
 
 	// Æ÷ÀÎÅÍ¸¦ ¶¿ ¶§ È£ÃâµÊ
@@ -61,7 +61,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		{
 			finalTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			CalculateSwipeAngle();
-		}		
+		}
 	}
 
 	void CalculateSwipeAngle()
@@ -73,7 +73,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		if (Vector3.Distance(firstTouchPos, finalTouchPos) > 0.5f)
 		{
 			MovePuzzles();
-		}	
+		}
 	}
 
 	void MovePuzzles()
@@ -186,4 +186,3 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		}
 	}
 }
-

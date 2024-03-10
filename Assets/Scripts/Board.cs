@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.XR;
 
 public class Board : MonoBehaviour
 {
@@ -19,6 +19,11 @@ public class Board : MonoBehaviour
 	public float puzzleSpeed;
 	public GameObject BackgroundTilePrefab;
 	public Button shuffleButton;
+	[Header("Bonus")]
+	public float multipleBonus;
+	public float bonusAmount = 1.5f;
+	public TextMeshProUGUI bonusText;
+	public float displayBounsTime = 2.0f;
 	[Space]
 	public Puzzle[] puzzles;
 	public Puzzle[,] allPuzzles;
@@ -30,8 +35,6 @@ public class Board : MonoBehaviour
 	int nullCount = 0; // 연속된 빈 공간의 수
 	int puzzleToUse; // 사용할 퍼즐
 	int shuffleCount = 0; // 셔플 횟수를 저장하는 변수
-	float multipleBonus;
-	float bonusAmount = 0.5f;
 
 	void Awake()
 	{
@@ -42,6 +45,8 @@ public class Board : MonoBehaviour
 	void Start()
 	{
 		allPuzzles = new Puzzle[width, height];
+
+		bonusText.gameObject.SetActive(false);
 
 		BoardSetUp();
 	}
@@ -183,7 +188,7 @@ public class Board : MonoBehaviour
 	IEnumerator RefillPuzzlesRoutine()
 	{
 		yield return new WaitForSeconds(0.3f);
-		
+
 		RefillPuzzles();
 
 		yield return new WaitForSeconds(0.3f);
@@ -194,13 +199,13 @@ public class Board : MonoBehaviour
 		if (matchManager.matchStatus.Count > 0)
 		{
 			// 일치하는 퍼즐이 있으면 multipleBonus 값을 증가
-			multipleBonus++;	
+			multipleBonus++;
 
 			yield return new WaitForSeconds(1.0f);
 			// 매치된 퍼즐들 삭제
 			DestroyMatch();
 		}
-		else 
+		else
 		{
 			yield return new WaitForSeconds(0.3f);
 
@@ -324,7 +329,24 @@ public class Board : MonoBehaviour
 			float bonusToAdd = puzzleToCheck.scoreValue * multipleBonus * bonusAmount;
 			// 보너스 값을 반올림하여 curScore에 더함
 			roundManager.curScore += Mathf.RoundToInt(bonusToAdd);
+
+			UpdateMultipleBonusText(bonusToAdd);
+			Debug.Log("Multiple Bonus Amount : " + bonusToAdd);
 		}
 	}
-}
 
+	void UpdateMultipleBonusText(float bonus)
+	{
+		bonusText.text = "Multiple " + bonus.ToString("0");
+
+		bonusText.gameObject.SetActive(true);
+
+		StartCoroutine(DisplayMultipleBonusTextRoutine());
+	}
+
+	IEnumerator DisplayMultipleBonusTextRoutine()
+	{
+		yield return new WaitForSeconds(displayBounsTime);
+		bonusText.gameObject.SetActive(false);
+	}
+}
