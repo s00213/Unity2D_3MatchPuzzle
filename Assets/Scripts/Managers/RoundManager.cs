@@ -55,10 +55,9 @@ public class RoundManager : MonoBehaviour
 	{
 		if (roundTime > 0 && !roundEnd)
 		{
-			roundTime -= Time.deltaTime;
+			timerSlider.value = roundTime;
 
-			// roundTime을 0에서 1로 정규화하여 슬라이더 값에 할당함
-			timerSlider.value = Mathf.Clamp01(roundTime / 60.0f);
+			roundTime -= Time.deltaTime;
 
 			if (roundTime <= 0)
 			{
