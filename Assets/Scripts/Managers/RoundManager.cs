@@ -20,13 +20,17 @@ public class RoundManager : MonoBehaviour
 	public float displayScore;
 	public float scoreSpeed; //스코어가 업데이트되는 속도
 	public int scoreTarget1, scoreTarget2, scoreTarget3;
-	[Header("Game Over")]
+	[Header("Pause")]
+	public string LevelSelectToLoad;
+	public GameObject pauseUI;
+   [Header("Game Over")]
 	public GameObject ResultUI;
 
 	Board board;
 
 	bool roundEnd = false;
 
+	
 	void Awake()
 	{
 		board = FindObjectOfType<Board>();
@@ -53,6 +57,33 @@ public class RoundManager : MonoBehaviour
 	public void ShuffleButton()
 	{
 		board.ShufflePuzzles();
+	}
+
+
+	public void PauseButton()
+	{
+		if (!pauseUI.activeInHierarchy)
+		{
+			pauseUI.SetActive(true);
+			Time.timeScale = 0f;
+		}
+		else
+		{
+			pauseUI.SetActive(false);
+			Time.timeScale = 1f;
+		}
+	}
+
+	public void LevelSelectButton()
+	{
+		Time.timeScale = 1f;
+		UnitySceneManager.LoadScene(LevelSelectToLoad);
+	}
+
+	public void QuitButton()
+	{
+		Application.Quit();
+		Debug.Log("Quit Game");
 	}
 
 	void Timer()
@@ -127,5 +158,7 @@ public class RoundManager : MonoBehaviour
 		{
 			star0.SetActive(true);
 		}
+
+		SoundManager.sound.PlayResult();
 	}
 }

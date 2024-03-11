@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static SoundManager;
 
 public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-	public enum PuzzleType { Bear, Chick, Crocodile, Narwhal, Panda, Parrot, Penguin, Pig }
+	public enum PuzzleType { Bear, Chick, Crocodile, Narwhal, Panda, Parrot, Penguin, Pig, Brick, Bomb }
 	public PuzzleType type;
 
 	[Header("Puzzle")]
@@ -132,6 +133,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		board.allPuzzles[otherPuzzle.posIndex.x, otherPuzzle.posIndex.y] = otherPuzzle;
 
 		StartCoroutine(CheckMoveRoutine());
+		SoundManager.sound.PlayPuzzleClick();
 	}
 
 	void ExchangePuzzles()
@@ -143,11 +145,11 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		}
 		else
 		{
-			//transform.position = new Vector2(posIndex.x, posIndex.y);
-			//board.allPuzzles[(int)posIndex.x, (int)posIndex.y] = this;
+			transform.position = new Vector2(posIndex.x, posIndex.y);
+			board.allPuzzles[(int)posIndex.x, (int)posIndex.y] = this;
 
-			transform.position = new Vector3(posIndex.x, posIndex.y, 0f);
-			board.allPuzzles[posIndex.x, posIndex.y] = this;
+			//transform.position = new Vector3(posIndex.x, posIndex.y, 0f);
+			//board.allPuzzles[posIndex.x, posIndex.y] = this;
 		}
 	}
 

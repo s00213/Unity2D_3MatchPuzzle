@@ -127,10 +127,23 @@ public class Board : MonoBehaviour
 		{
 			if (allPuzzles[pos.x, pos.y].isMatched)
 			{
+				if (allPuzzles[pos.x, pos.y].type == Puzzle.PuzzleType.Brick)
+				{
+					SoundManager.sound.PlayBrickBreak();
+				}
+				else if (allPuzzles[pos.x, pos.y].type == Puzzle.PuzzleType.Bomb)
+				{
+					SoundManager.sound.PlayBomb();
+				}
+				else
+				{
+					SoundManager.sound.PlayMatch();
+				}
+
 				Instantiate(allPuzzles[pos.x, pos.y].destroyEffect, new Vector2(pos.x, pos.y), Quaternion.identity);
 
 				Destroy(allPuzzles[pos.x, pos.y].gameObject);
-				allPuzzles[pos.x, pos.y] = null;
+				allPuzzles[pos.x, pos.y] = null;				
 			}
 		}
 	}
@@ -348,5 +361,6 @@ public class Board : MonoBehaviour
 	{
 		yield return new WaitForSeconds(displayBounsTime);
 		bonusText.gameObject.SetActive(false);
+
 	}
 }

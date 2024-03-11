@@ -13,7 +13,6 @@ public class Scene : MonoBehaviour
 		//GameManager.Scene.LoadScene("LevelSelectScene");
 		//GameManager.Scene.LoadScene("GameScene");
 
-		//TODO : 로딩 추가 후 SceneManager로 변경
 		UnitySceneManager.LoadScene(levelSelectScene);
 	}
 
@@ -22,7 +21,6 @@ public class Scene : MonoBehaviour
 		//GameManager.Scene.LoadScene("LevelSelectScene");
 		//GameManager.Scene.LoadScene("GameScene");
 
-		//TODO : 로딩 추가 후 SceneManager로 변경
 		UnitySceneManager.LoadScene(replayScene);
 	}
 }

@@ -10,15 +10,6 @@ public class LevelSelectScene : MonoBehaviour
 
 	public string titleScene = "TitleScene";
 
-	public void ReturnTitleScene()
-	{
-		//GameManager.Scene.LoadScene("LevelSelectScene");
-		//GameManager.Scene.LoadScene("GameScene");
-
-		//TODO : 로딩 추가 후 SceneManager로 변경
-		UnitySceneManager.LoadScene(titleScene);
-	}
-
 	private void Awake()
 	{
 		int unlockLevel = PlayerPrefs.GetInt("unlockLevel", 1);
@@ -31,6 +22,15 @@ public class LevelSelectScene : MonoBehaviour
 		{
 			levelButtons[i].interactable = true;
 		}
+	}
+
+	public void ReturnTitleScene()
+	{
+		//GameManager.Scene.LoadScene("LevelSelectScene");
+		//GameManager.Scene.LoadScene("GameScene");
+
+		//TODO : 로딩 추가 후 SceneManager로 변경
+		UnitySceneManager.LoadScene(titleScene);
 	}
 }
 
