@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public class RoundManager : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class RoundManager : MonoBehaviour
 	public TextMeshProUGUI resultScoreText;
 	public GameObject star0, star1, stars2, stars3;
 	[Header("Timer")]
-	public float roundTime = 60f;
+	public float roundTime;
 	public Slider timerSlider;
 	[Header("Score")]
 	public int curScore;
@@ -37,6 +38,9 @@ public class RoundManager : MonoBehaviour
 		star1.SetActive(false);
 		stars2.SetActive(false);
 		stars3.SetActive(false);
+
+		timerSlider.maxValue = roundTime;
+		timerSlider.value = roundTime;
 	}
 
 	void Update()
@@ -55,9 +59,9 @@ public class RoundManager : MonoBehaviour
 	{
 		if (roundTime > 0 && !roundEnd)
 		{
-			timerSlider.value = roundTime;
-
 			roundTime -= Time.deltaTime;
+
+			timerSlider.value = roundTime;
 
 			if (roundTime <= 0)
 			{
@@ -92,14 +96,32 @@ public class RoundManager : MonoBehaviour
 		if (curScore >= scoreTarget3)
 		{
 			stars3.SetActive(true);
+			if (UnitySceneManager.GetActiveScene().buildIndex >= PlayerPrefs.GetInt("ScoreTarget3"))
+			{
+				PlayerPrefs.SetInt("ScoreTarget3", UnitySceneManager.GetActiveScene().buildIndex + 1);
+				PlayerPrefs.SetInt("unlockLevel", PlayerPrefs.GetInt("unlockLevel", 1) + 1);
+				PlayerPrefs.Save();
+			}
 		}
 		else if (curScore >= scoreTarget2)
 		{
 			stars2.SetActive(true);
+			if (UnitySceneManager.GetActiveScene().buildIndex >= PlayerPrefs.GetInt("ScoreTarget2"))
+			{
+				PlayerPrefs.SetInt("ScoreTarget2", UnitySceneManager.GetActiveScene().buildIndex + 1);
+				PlayerPrefs.SetInt("unlockLevel", PlayerPrefs.GetInt("unlockLevel", 1) + 1);
+				PlayerPrefs.Save();
+			}
 		}
 		else if (curScore >= scoreTarget1)
 		{
 			star1.SetActive(true);
+			if (UnitySceneManager.GetActiveScene().buildIndex >= PlayerPrefs.GetInt("ScoreTarget1"))
+			{
+				PlayerPrefs.SetInt("ScoreTarget1", UnitySceneManager.GetActiveScene().buildIndex + 1);
+				PlayerPrefs.SetInt("unlockLevel", PlayerPrefs.GetInt("unlockLevel", 1) + 1);
+				PlayerPrefs.Save();
+			}
 		}
 		else
 		{
