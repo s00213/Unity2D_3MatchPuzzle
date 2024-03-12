@@ -245,6 +245,8 @@ MonoBehaviour:
   comboAmount: 2
   comboText: {fileID: 919489888}
   displayComboTime: 3
+  appleBomb: {fileID: 7577605039827428986, guid: 23ab929890c9b574c92174237b885940, type: 3}
+  appleBombChance: 2
   puzzles:
   - {fileID: 1003480595377931992, guid: 42fca94760e50e6409eafff26850c122, type: 3}
   - {fileID: 5656477307368254474, guid: 2457556564a03fc4a9804e65736c9eac, type: 3}
@@ -255,6 +257,9 @@ MonoBehaviour:
   - {fileID: 8891793043950976280, guid: 8fa2da6d34667144693d39aaf3e9c8bf, type: 3}
   - {fileID: 5656477307368254474, guid: 2457556564a03fc4a9804e65736c9eac, type: 3}
   - {fileID: 1003480595377931992, guid: 88206df9e8b29bb45b094ddc5e656126, type: 3}
+  - {fileID: 7577605039827428986, guid: 23ab929890c9b574c92174237b885940, type: 3}
+  - {fileID: 5656477307368254474, guid: e4746b74749e9b242bd28e3aed08b9db, type: 3}
+  - {fileID: 5656477307368254474, guid: fe3f4d5c1ffe3334f8d65cf0489a7099, type: 3}
 --- !u!1 &334394758 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5459005335769874696, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}

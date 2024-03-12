@@ -74,6 +74,6 @@ public class MatchManager : MonoBehaviour
 		{
 			matchStatus = matchStatus.Distinct().ToList();
 		}
-	}	
+	}
 }
 

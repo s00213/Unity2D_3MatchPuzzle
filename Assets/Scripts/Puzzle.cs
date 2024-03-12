@@ -5,7 +5,11 @@ using UnityEngine.EventSystems;
 
 public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-	public enum PuzzleType { Bear, Chick, Crocodile, Narwhal, Panda, Parrot, Penguin, Pig, Brick, Bomb }
+	public enum PuzzleType 
+	{ 
+		Bear, Chick, Crocodile, Narwhal, Panda, Parrot, Penguin, Pig,
+		Brick, AppleBomb, Blueberry, Grape
+	}
 	public PuzzleType type;
 
 	[Header("Puzzle")]

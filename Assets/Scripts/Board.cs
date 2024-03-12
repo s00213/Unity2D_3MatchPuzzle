@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class Board : MonoBehaviour
 {
 	public enum BoardStatus { Idle, Move }
-	public BoardStatus curStatus = BoardStatus.Move; //  °ÔÀÓ ½ÃÀÛ ½Ã¿¡´Â Move¿©¾ß ÇÔ
+	public BoardStatus curStatus = BoardStatus.Move; //  ê²Œì„ ì‹œì‘ ì‹œì—ëŠ” Moveì—¬ì•¼ í•¨
 
 	List<Puzzle> findPuzzles = new List<Puzzle>();
 	List<Puzzle> tempPuzzles = new List<Puzzle>();
@@ -24,6 +24,9 @@ public class Board : MonoBehaviour
 	public float comboAmount = 1.5f;
 	public TextMeshProUGUI comboText;
 	public float displayComboTime = 2.0f;
+	[Header("Apple Bomb")]
+	public Puzzle appleBomb;
+	public float appleBombChance;
 	[Space]
 	public Puzzle[] puzzles;
 	public Puzzle[,] allPuzzles;
@@ -31,10 +34,10 @@ public class Board : MonoBehaviour
 	MatchManager matchManager;
 	RoundManager roundManager;
 
-	int iteration = 0; // ¹İº¹
-	int nullCount = 0; // ¿¬¼ÓµÈ ºó °ø°£ÀÇ ¼ö
-	int puzzleToUse; // »ç¿ëÇÒ ÆÛÁñ
-	int shuffleCount = 0; // ¼ÅÇÃ È½¼ö¸¦ ÀúÀåÇÏ´Â º¯¼ö
+	int iteration = 0; // ë°˜ë³µ
+	int nullCount = 0; // ì—°ì†ëœ ë¹ˆ ê³µê°„ì˜ ìˆ˜
+	int puzzleToUse; // ì‚¬ìš©í•  í¼ì¦
+	int shuffleCount = 0; // ì…”í”Œ íšŸìˆ˜ë¥¼ ì €ì¥í•˜ëŠ” ë³€ìˆ˜
 
 	void Awake()
 	{
@@ -64,10 +67,10 @@ public class Board : MonoBehaviour
 
 				puzzleToUse = Random.Range(0, puzzles.Length);
 
-				// ÇöÀç À§Ä¡¿Í ¼±ÅÃµÈ ÆÛÁñÀÌ ÀÏÄ¡ÇÏ´ÂÁö È®ÀÎÇÏ°í 100¹Ì¸¸¾È µ¿¾È¿¡ ¹İº¹ÇÔ
+				// í˜„ì¬ ìœ„ì¹˜ì™€ ì„ íƒëœ í¼ì¦ì´ ì¼ì¹˜í•˜ëŠ”ì§€ í™•ì¸í•˜ê³  100ë¯¸ë§Œì•ˆ ë™ì•ˆì— ë°˜ë³µí•¨
 				while (MatchSamePuzzles(new Vector2Int(x, y), puzzles[puzzleToUse]) && iteration < 100)
 				{
-					// ÆÛÁñ ¹è¿­¿¡¼­ ·£´ıÀ¸·Î ÆÛÁñ ¼±ÅÃ
+					// í¼ì¦ ë°°ì—´ì—ì„œ ëœë¤ìœ¼ë¡œ í¼ì¦ ì„ íƒ
 					puzzleToUse = Random.Range(0, puzzles.Length);
 					iteration++;
 
@@ -93,34 +96,36 @@ public class Board : MonoBehaviour
 		puzzle.PuzzleSetUp(pos, this);
 	}
 
-	// °¡·Î ¶Ç´Â ¼¼·Î ¹æÇâÀ¸·Î ÀÏÄ¡ÇÏ´Â º¸¼®ÀÌ ÀÖ´ÂÁö¸¦ È®ÀÎ
+	// ê°€ë¡œ ë˜ëŠ” ì„¸ë¡œ ë°©í–¥ìœ¼ë¡œ ì¼ì¹˜í•˜ëŠ” í¼ì¦ì´ ìˆëŠ”ì§€ë¥¼ í™•ì¸
 	bool MatchSamePuzzles(Vector2Int checkPos, Puzzle checkPuzzle)
 	{
 		if (checkPos.x > 1)
 		{
-			// °¡·Î ¹æÇâ¿¡¼­ 2Ä­ ¶³¾îÁø ÆÛÁñ°ú ºñ±³ÇÒ ‹š
-			if (allPuzzles[checkPos.x - 1, checkPos.y].type == checkPuzzle.type && allPuzzles[checkPos.x - 2, checkPos.y].type == checkPuzzle.type)
+			// ê°€ë¡œ ë°©í–¥ì—ì„œ 2ì¹¸ ë–¨ì–´ì§„ í¼ì¦ê³¼ ë¹„êµí•  Â‹Âšë•Œ
+			if (allPuzzles[checkPos.x - 1, checkPos.y].type == checkPuzzle.type
+				&& allPuzzles[checkPos.x - 2, checkPos.y].type == checkPuzzle.type)
 			{
-				// °°´Ù¸é true
+				// ê°™ë‹¤ë©´ true
 				return true;
 			}
 		}
 
 		if (checkPos.y > 1)
 		{
-			// ¼¼·Î ¹æÇâ¿¡¼­ 2Ä­ ¶³¾îÁø ÆÛÁñ°ú ºñ±³ÇÒ ‹š
-			if (allPuzzles[checkPos.x, checkPos.y - 1].type == checkPuzzle.type && allPuzzles[checkPos.x, checkPos.y - 2].type == checkPuzzle.type)
+			// ì„¸ë¡œ ë°©í–¥ì—ì„œ 2ì¹¸ ë–¨ì–´ì§„ í¼ì¦ê³¼ ë¹„êµí•  Â‹Âšë•Œ
+			if (allPuzzles[checkPos.x, checkPos.y - 1].type == checkPuzzle.type
+				&& allPuzzles[checkPos.x, checkPos.y - 2].type == checkPuzzle.type)
 			{
-				// °°´Ù¸é true
+				// ê°™ë‹¤ë©´ true
 				return true;
 			}
 		}
 
-		// ±× ¿ÜÀÇ °æ¿ì¿¡´Â Ç×»ó false¸¦ ¹İÈ¯
+		// ê·¸ ì™¸ì˜ ê²½ìš°ì—ëŠ” í•­ìƒ falseë¥¼ ë°˜í™˜í•¨
 		return false;
 	}
 
-	// ¸ÅÄ¡µÈ »óÅÂÀÎ ÆÛÁñ ¿ÀºêÁ§Æ®¸¦ »èÁ¦ÇÏ°í ¹è¿­¿¡¼­ ÇØ´ç ÆÛÁñ À§Ä¡¸¦ nullÀÌ µÇµµ·Ï ÇÔ
+	// ë§¤ì¹˜ëœ ìƒíƒœì¸ í¼ì¦ ì˜¤ë¸Œì íŠ¸ë¥¼ ì‚­ì œí•˜ê³  ë°°ì—´ì—ì„œ í•´ë‹¹ í¼ì¦ ìœ„ì¹˜ë¥¼ nullì´ ë˜ë„ë¡ í•¨
 	void DestroySamePuzzles(Vector2Int pos)
 	{
 		if (allPuzzles[pos.x, pos.y] != null)
@@ -131,7 +136,7 @@ public class Board : MonoBehaviour
 				{
 					SoundManager.sound.PlayBrick();
 				}
-				else if (allPuzzles[pos.x, pos.y].type == Puzzle.PuzzleType.Bomb)
+				else if (allPuzzles[pos.x, pos.y].type == Puzzle.PuzzleType.AppleBomb)
 				{
 					SoundManager.sound.PlayBomb();
 				}
@@ -142,13 +147,14 @@ public class Board : MonoBehaviour
 
 				Instantiate(allPuzzles[pos.x, pos.y].destroyEffect, new Vector2(pos.x, pos.y), Quaternion.identity);
 
+
 				Destroy(allPuzzles[pos.x, pos.y].gameObject);
-				allPuzzles[pos.x, pos.y] = null;				
+				allPuzzles[pos.x, pos.y] = null;
 			}
 		}
 	}
 
-	// Match Status ¸®½ºÆ®¿¡ ÀúÀåµÈ À§Ä¡¸¦ ±â¹İÀ¸·Î ÆÛÁñ ¿ÀºêÁ§Æ®¸¦ »èÁ¦ÇÔ
+	// Match Status ë¦¬ìŠ¤íŠ¸ì— ì €ì¥ëœ ìœ„ì¹˜ë¥¼ ê¸°ë°˜ìœ¼ë¡œ í¼ì¦ ì˜¤ë¸Œì íŠ¸ë¥¼ ì‚­ì œí•¨
 	public void DestroyMatch()
 	{
 		for (int i = 0; i < matchManager.matchStatus.Count; i++)
@@ -164,7 +170,8 @@ public class Board : MonoBehaviour
 		StartCoroutine(FallPuzzlesRoutine());
 	}
 
-	// ºó °ø°£ÀÌ »ı±â¸é ÇØ´ç y À§Ä¡ÀÇ ¸ğµç ÆÛÁñÀ» ¾Æ·¡·Î ÀÌµ¿
+
+	// ë¹ˆ ê³µê°„ì´ ìƒê¸°ë©´ í•´ë‹¹ y ìœ„ì¹˜ì˜ ëª¨ë“  í¼ì¦ì„ ì•„ë˜ë¡œ ì´ë™
 	IEnumerator FallPuzzlesRoutine()
 	{
 		yield return new WaitForSeconds(0.3f);
@@ -173,25 +180,25 @@ public class Board : MonoBehaviour
 		{
 			for (int y = 0; y < height; y++)
 			{
-				// ÇöÀç À§Ä¡¿¡ ÆÛÁñÀÌ ¾ø´Ù¸é
+				// í˜„ì¬ ìœ„ì¹˜ì— í¼ì¦ì´ ì—†ë‹¤ë©´
 				if (allPuzzles[x, y] == null)
 				{
-					// nullCount Áõ°¡
+					// nullCount ì¦ê°€
 					nullCount++;
 				}
-				// nullCount°¡ ÀÖ´Ù¸é
+				// nullCountê°€ ìˆë‹¤ë©´
 				else if (nullCount > 0)
 				{
-					// nullCount¸¸Å­ ÇØ´ç y À§Ä¡ÀÇ ÆÛÁñ ¿ÀºêÁ§Æ®¸¦ ³»·Áº¸³¿
+					// nullCountë§Œí¼ í•´ë‹¹ y ìœ„ì¹˜ì˜ í¼ì¦ ì˜¤ë¸Œì íŠ¸ë¥¼ ë‚´ë ¤ë³´ëƒ„
 					allPuzzles[x, y].posIndex.y -= nullCount;
-					// ³»¸° À§Ä¡¿¡ ÆÛÁñÀÇ À§Ä¡ Á¤º¸µµ ³»·Áº¸³¿
+					// ë‚´ë¦° ìœ„ì¹˜ì— í¼ì¦ì˜ ìœ„ì¹˜ ì •ë³´ë„ ë‚´ë ¤ë³´ëƒ„
 					allPuzzles[x, y - nullCount] = allPuzzles[x, y];
-					// ¿ø·¡ À§Ä¡ÀÇ ÆÛÁñÀº nullÀÌ µÇµµ·Ï ÇÔ
+					// ì›ë˜ ìœ„ì¹˜ì˜ í¼ì¦ì€ nullì´ ë˜ë„ë¡ í•¨
 					allPuzzles[x, y] = null;
 				}
 			}
 
-			// nullCount 0À¸·Î ÃÊ±âÈ­
+			// nullCount 0ìœ¼ë¡œ ì´ˆê¸°í™”
 			nullCount = 0;
 		}
 
@@ -208,14 +215,14 @@ public class Board : MonoBehaviour
 
 		matchManager.MatchPuzzleType();
 
-		// matchStatus ¸®½ºÆ®¿¡ ÀÏÄ¡ÇÏ´Â ÆÛÁñÀÌ ÇÏ³ª ÀÌ»ó ÀÖ´Â °æ¿ì
+		// matchStatus ë¦¬ìŠ¤íŠ¸ì— ì¼ì¹˜í•˜ëŠ” í¼ì¦ì´ í•˜ë‚˜ ì´ìƒ ìˆëŠ” ê²½ìš°
 		if (matchManager.matchStatus.Count > 0)
 		{
-			// ÀÏÄ¡ÇÏ´Â ÆÛÁñÀÌ ÀÖÀ¸¸é combo¸¦ Áõ°¡
+			// ì¼ì¹˜í•˜ëŠ” í¼ì¦ì´ ìˆìœ¼ë©´ comboë¥¼ ì¦ê°€
 			combo++;
 
 			yield return new WaitForSeconds(1.0f);
-			// ¸ÅÄ¡µÈ ÆÛÁñµé »èÁ¦
+			// ë§¤ì¹˜ëœ í¼ì¦ë“¤ ì‚­ì œ
 			DestroyMatch();
 		}
 		else
@@ -224,24 +231,24 @@ public class Board : MonoBehaviour
 
 			curStatus = Board.BoardStatus.Move;
 
-			// combo¸¦ ÃÊ±âÈ­ÇÔ
+			// comboë¥¼ ì´ˆê¸°í™”í•¨
 			combo = 0f;
 		}
 	}
 
-	// ºñ¾îÀÖ´Â À§Ä¡¿¡ ÆÛÁñÀ» Ã¤¿ò
+	// ë¹„ì–´ìˆëŠ” ìœ„ì¹˜ì— í¼ì¦ì„ ì±„ì›€
 	void RefillPuzzles()
 	{
 		for (int x = 0; x < width; x++)
 		{
 			for (int y = 0; y < height; y++)
 			{
-				// ºñ¾î ÀÖ´Â À§Ä¡¿¡ ÆÛÁñÀÌ ¾ø´Â °æ¿ì
+				// ë¹„ì–´ ìˆëŠ” ìœ„ì¹˜ì— í¼ì¦ì´ ì—†ëŠ” ê²½ìš°
 				if (allPuzzles[x, y] == null)
 				{
-					// puzzles ¹è¿­ÀÇ ±æÀÌ¸¦ ±â¹İÀ¸·Î ¹«ÀÛÀ§·Î ÀÎµ¦½º¸¦ ¼±ÅÃÇÔ
+					// puzzles ë°°ì—´ì˜ ê¸¸ì´ë¥¼ ê¸°ë°˜ìœ¼ë¡œ ë¬´ì‘ìœ„ë¡œ ì¸ë±ìŠ¤ë¥¼ ì„ íƒí•¨
 					puzzleToUse = Random.Range(0, puzzles.Length);
-					// ¼±ÅÃµÈ ÆÛÁñÀ» ÇöÀç À§Ä¡¿¡ »ı¼ºÇÔ
+					// ì„ íƒëœ í¼ì¦ì„ í˜„ì¬ ìœ„ì¹˜ì— ìƒì„±í•¨
 					SpawnPuzzles(new Vector2Int(x, y), puzzles[puzzleToUse]);
 				}
 			}
@@ -250,17 +257,17 @@ public class Board : MonoBehaviour
 		CheckMisplacePuzzles();
 	}
 
-	// Àß¸øµÈ À§Ä¡¿¡ ¹èÄ¡µÈ ÆÛÁñÀ» È®ÀÎÇÏ¿© Á¦°ÅÇÔ
+	// ì˜ëª»ëœ ìœ„ì¹˜ì— ë°°ì¹˜ëœ í¼ì¦ì„ í™•ì¸í•˜ì—¬ ì œê±°í•¨
 	void CheckMisplacePuzzles()
 	{
-		// findPuzzles ¸®½ºÆ®¿¡ Ã£Àº ¸ğµç Puzzle ¿ÀºêÁ§Æ®¸¦ Ãß°¡ÇÔ
+		// findPuzzles ë¦¬ìŠ¤íŠ¸ì— ì°¾ì€ ëª¨ë“  Puzzle ì˜¤ë¸Œì íŠ¸ë¥¼ ì¶”ê°€í•¨
 		findPuzzles.AddRange(FindObjectsOfType<Puzzle>());
 
 		for (int x = 0; x < width; x++)
 		{
 			for (int y = 0; y < height; y++)
 			{
-				// ÇöÀç À§Ä¡¿¡ ÀÖ´Â ÆÛÁñÀÌ findPuzzles ¸®½ºÆ®¿¡ Æ÷ÇÔµÇ¾î ÀÖ´Ù¸é »èÁ¦ÇÔ
+				// í˜„ì¬ ìœ„ì¹˜ì— ìˆëŠ” í¼ì¦ì´ findPuzzles ë¦¬ìŠ¤íŠ¸ì— í¬í•¨ë˜ì–´ ìˆë‹¤ë©´ ì‚­ì œí•¨
 				if (findPuzzles.Contains(allPuzzles[x, y]))
 				{
 					findPuzzles.Remove(allPuzzles[x, y]);
@@ -268,7 +275,7 @@ public class Board : MonoBehaviour
 			}
 		}
 
-		// findPuzzles ¸®½ºÆ®¿¡ ³²¾ÆÀÖ´Ù¸é °ÔÀÓ ¿ÀºêÁ§Æ®¸¦ »èÁ¦¸¦ ¹İº¹ÇÔ
+		// findPuzzles ë¦¬ìŠ¤íŠ¸ì— ë‚¨ì•„ìˆë‹¤ë©´ ê²Œì„ ì˜¤ë¸Œì íŠ¸ë¥¼ ì‚­ì œë¥¼ ë°˜ë³µí•¨
 		foreach (Puzzle g in findPuzzles)
 		{
 			Destroy(g.gameObject);
@@ -281,14 +288,14 @@ public class Board : MonoBehaviour
 		{
 			curStatus = BoardStatus.Idle;
 
-			// ¼¼ ¹ø±îÁö¸¸ ½ÇÇàµÇµµ·Ï Á¦ÇÑÇÔ
+			// ì„¸ ë²ˆê¹Œì§€ë§Œ ì‹¤í–‰ë˜ë„ë¡ ì œí•œí•¨
 			if (shuffleCount < 3)
 			{
 				for (int x = 0; x < width; x++)
 				{
 					for (int y = 0; y < height; y++)
 					{
-						// ÇöÀç À§Ä¡ÀÇ ÆÛÁñÀ» ¸®½ºÆ®¿¡ Ãß°¡ÇÏ°í ¹è¿­¿¡¼­ ºñ¿ì°Ô ÇÔ
+						// í˜„ì¬ ìœ„ì¹˜ì˜ í¼ì¦ì„ ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€í•˜ê³  ë°°ì—´ì—ì„œ ë¹„ìš°ê²Œ í•¨
 						tempPuzzles.Add(allPuzzles[x, y]);
 						allPuzzles[x, y] = null;
 					}
@@ -298,10 +305,10 @@ public class Board : MonoBehaviour
 				{
 					for (int y = 0; y < height; y++)
 					{
-						// ·£´ıÀ¸·Î ÆÛÁñÀ» ¼±ÅÃÇÔ
+						// ëœë¤ìœ¼ë¡œ í¼ì¦ì„ ì„ íƒí•¨
 						puzzleToUse = Random.Range(0, tempPuzzles.Count);
 
-						// µ¿ÀÏÇÑ Á¾·ùÀÇ ÆÛÁñÀ» ¼±ÅÃÇÏ´Â °æ¿ì ÃÖ´ë 100¹ø±îÁö Àç½ÃµµÇÔ
+						// ë™ì¼í•œ ì¢…ë¥˜ì˜ í¼ì¦ì„ ì„ íƒí•˜ëŠ” ê²½ìš° ìµœëŒ€ 100ë²ˆê¹Œì§€ ì¬ì‹œë„í•¨
 						iteration = 0;
 						while (MatchSamePuzzles(new Vector2Int(x, y), tempPuzzles[puzzleToUse]) && iteration < 100 && tempPuzzles.Count > 1)
 						{
@@ -309,11 +316,11 @@ public class Board : MonoBehaviour
 							iteration++;
 						}
 
-						// ¼±ÅÃµÈ ÆÛÁñÀ» ÇöÀç À§Ä¡¿¡ ¹èÄ¡ÇÏ°í Á¤º¸¸¦ ¼³Á¤ÇÔ
+						// ì„ íƒëœ í¼ì¦ì„ í˜„ì¬ ìœ„ì¹˜ì— ë°°ì¹˜í•˜ê³  ì •ë³´ë¥¼ ì„¤ì •í•¨
 						tempPuzzles[puzzleToUse].PuzzleSetUp(new Vector2Int(x, y), this);
 						allPuzzles[x, y] = tempPuzzles[puzzleToUse];
 
-						// ¼ÅÇÃ ÀÌÈÄ¿¡ ÇØ´ç ÆÛÁñÀ» tempPuzzles ¸®½ºÆ®¿¡¼­ Á¦°ÅÇÏ¿© Áßº¹À» ¹æÁöÇÔ
+						// ì…”í”Œ ì´í›„ì— í•´ë‹¹ í¼ì¦ì„ tempPuzzles ë¦¬ìŠ¤íŠ¸ì—ì„œ ì œê±°í•˜ì—¬ ì¤‘ë³µì„ ë°©ì§€í•¨
 						tempPuzzles.RemoveAt(puzzleToUse);
 					}
 				}
@@ -331,17 +338,17 @@ public class Board : MonoBehaviour
 		}
 	}
 
-	// ÆÛÁñÀÇ ½ºÄÚ¾î¸¦ È®ÀÎÇÏ°í ÇöÀç ½ºÄÚ¾î¸¦ ¾÷µ¥ÀÌÆ®ÇÔ
+	// í¼ì¦ì˜ ìŠ¤ì½”ì–´ë¥¼ í™•ì¸í•˜ê³  í˜„ì¬ ìŠ¤ì½”ì–´ë¥¼ ì—…ë°ì´íŠ¸í•¨
 	public void CheckScore(Puzzle puzzleToCheck)
 	{
 		roundManager.curScore += puzzleToCheck.scoreValue;
 
-		// combo Àû¿ëµÈ °æ¿ì
+		// combo ì ìš©ëœ ê²½ìš°
 		if (combo > 0)
 		{
-			// combo µû¶ó Ãß°¡µÉ bonusAmount¸¦ °è»êÇÔ
+			// combo ë”°ë¼ ì¶”ê°€ë  bonusAmountë¥¼ ê³„ì‚°í•¨
 			float comboToAdd = puzzleToCheck.scoreValue * combo * comboAmount;
-			// º¸³Ê½º °ªÀ» ¹İ¿Ã¸²ÇÏ¿© curScore¿¡ ´õÇÔ
+			// ë³´ë„ˆìŠ¤ ê°’ì„ ë°˜ì˜¬ë¦¼í•˜ì—¬ curScoreì— ë”í•¨
 			roundManager.curScore += Mathf.RoundToInt(comboToAdd);
 
 			UpdateComboText(comboToAdd);
@@ -362,6 +369,7 @@ public class Board : MonoBehaviour
 	IEnumerator DisplayComboTextRoutine()
 	{
 		yield return new WaitForSeconds(displayComboTime);
-		comboText.gameObject.SetActive(false);	
+		comboText.gameObject.SetActive(false);
 	}
 }
+
