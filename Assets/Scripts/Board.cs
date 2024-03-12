@@ -20,10 +20,10 @@ public class Board : MonoBehaviour
 	public GameObject BackgroundTilePrefab;
 	public Button shuffleButton;
 	[Header("Bonus")]
-	public float multipleBonus;
-	public float bonusAmount = 1.5f;
-	public TextMeshProUGUI bonusText;
-	public float displayBounsTime = 2.0f;
+	public float combo;
+	public float comboAmount = 1.5f;
+	public TextMeshProUGUI comboText;
+	public float displayComboTime = 2.0f;
 	[Space]
 	public Puzzle[] puzzles;
 	public Puzzle[,] allPuzzles;
@@ -46,7 +46,7 @@ public class Board : MonoBehaviour
 	{
 		allPuzzles = new Puzzle[width, height];
 
-		bonusText.gameObject.SetActive(false);
+		comboText.gameObject.SetActive(false);
 
 		BoardSetUp();
 	}
@@ -129,7 +129,7 @@ public class Board : MonoBehaviour
 			{
 				if (allPuzzles[pos.x, pos.y].type == Puzzle.PuzzleType.Brick)
 				{
-					SoundManager.sound.PlayBrickBreak();
+					SoundManager.sound.PlayBrick();
 				}
 				else if (allPuzzles[pos.x, pos.y].type == Puzzle.PuzzleType.Bomb)
 				{
@@ -211,8 +211,8 @@ public class Board : MonoBehaviour
 		// matchStatus 리스트에 일치하는 퍼즐이 하나 이상 있는 경우
 		if (matchManager.matchStatus.Count > 0)
 		{
-			// 일치하는 퍼즐이 있으면 multipleBonus 값을 증가
-			multipleBonus++;
+			// 일치하는 퍼즐이 있으면 combo를 증가
+			combo++;
 
 			yield return new WaitForSeconds(1.0f);
 			// 매치된 퍼즐들 삭제
@@ -224,8 +224,8 @@ public class Board : MonoBehaviour
 
 			curStatus = Board.BoardStatus.Move;
 
-			// multipleBonus 값을 초기화함
-			multipleBonus = 0f;
+			// combo를 초기화함
+			combo = 0f;
 		}
 	}
 
@@ -319,6 +319,7 @@ public class Board : MonoBehaviour
 				}
 
 				shuffleCount++;
+				SoundManager.sound.PlayShuffle();
 
 				if (shuffleCount >= 3)
 				{
@@ -335,32 +336,32 @@ public class Board : MonoBehaviour
 	{
 		roundManager.curScore += puzzleToCheck.scoreValue;
 
-		// multipleBonus 적용된 경우
-		if (multipleBonus > 0)
+		// combo 적용된 경우
+		if (combo > 0)
 		{
-			// multipleBonus에 따라 추가될 bonusAmount를 계산함
-			float bonusToAdd = puzzleToCheck.scoreValue * multipleBonus * bonusAmount;
+			// combo 따라 추가될 bonusAmount를 계산함
+			float comboToAdd = puzzleToCheck.scoreValue * combo * comboAmount;
 			// 보너스 값을 반올림하여 curScore에 더함
-			roundManager.curScore += Mathf.RoundToInt(bonusToAdd);
+			roundManager.curScore += Mathf.RoundToInt(comboToAdd);
 
-			UpdateMultipleBonusText(bonusToAdd);
-			Debug.Log("Multiple Bonus Amount : " + bonusToAdd);
+			UpdateComboText(comboToAdd);
+			Debug.Log("Combo Amount : " + comboToAdd);
 		}
 	}
 
-	void UpdateMultipleBonusText(float bonus)
+	void UpdateComboText(float combo)
 	{
-		bonusText.text = "Multiple " + bonus.ToString("0");
+		comboText.text = "COMBO " + combo.ToString("0");
 
-		bonusText.gameObject.SetActive(true);
+		comboText.gameObject.SetActive(true);
+		SoundManager.sound.PlayCombo();
 
-		StartCoroutine(DisplayMultipleBonusTextRoutine());
+		StartCoroutine(DisplayComboTextRoutine());
 	}
 
-	IEnumerator DisplayMultipleBonusTextRoutine()
+	IEnumerator DisplayComboTextRoutine()
 	{
-		yield return new WaitForSeconds(displayBounsTime);
-		bonusText.gameObject.SetActive(false);
-
+		yield return new WaitForSeconds(displayComboTime);
+		comboText.gameObject.SetActive(false);	
 	}
 }

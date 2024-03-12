@@ -10,7 +10,7 @@ public class SoundManager : MonoBehaviour
 {
 	public static SoundManager sound;
 
-	public AudioSource MatchSound, puzzleClickSound, BrickSound, BombSound, resultSound;
+	public AudioSource MatchSound, puzzleClickSound, BrickSound, BombSound, resultSound, comboSound, shuffleSound;
 
 	
 	void Awake()
@@ -30,7 +30,7 @@ public class SoundManager : MonoBehaviour
 		puzzleClickSound.Play();
 	}
 
-	public void PlayBrickBreak()
+	public void PlayBrick()
 	{
 		BrickSound.Stop();
 		BrickSound.Play();
@@ -46,5 +46,17 @@ public class SoundManager : MonoBehaviour
 	{
 		resultSound.Stop();
 		resultSound.Play();
+	}
+
+	public void PlayCombo() 
+	{
+		comboSound.Stop();
+		comboSound.Play();
+	}
+
+	public void PlayShuffle()
+	{
+		shuffleSound.Stop();
+		shuffleSound.Play();
 	}
 }

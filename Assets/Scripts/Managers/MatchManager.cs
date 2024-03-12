@@ -34,7 +34,7 @@ public class MatchManager : MonoBehaviour
 
 						if (leftPuzzle != null && rightPuzzle != null)
 						{
-							if (leftPuzzle.type == curPuzzle.type && rightPuzzle.type == curPuzzle.type)
+							if (leftPuzzle.type == curPuzzle.type && rightPuzzle.type == curPuzzle.type && curPuzzle.type != Puzzle.PuzzleType.Brick)
 							{
 								curPuzzle.isMatched = true;
 								leftPuzzle.isMatched = true;
@@ -55,7 +55,7 @@ public class MatchManager : MonoBehaviour
 
 					if (upPuzzle != null && downPuzzle != null)
 					{
-						if (upPuzzle.type == curPuzzle.type && downPuzzle.type == curPuzzle.type)
+						if (upPuzzle.type == curPuzzle.type && downPuzzle.type == curPuzzle.type && curPuzzle.type != Puzzle.PuzzleType.Brick)
 						{
 							curPuzzle.isMatched = true;
 							upPuzzle.isMatched = true;
