@@ -7,10 +7,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
-using UnityEditor.Rendering.LookDev;
-using UnityEditor.VersionControl;
+using UnityEditor.PackageManager;
 using UnityEngine;
-using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public class FirebaseManager : MonoBehaviour
 {
@@ -42,9 +40,7 @@ public class FirebaseManager : MonoBehaviour
 
 	TitleScene titleScene;
 
-	int level;
-	int point;
-	int nextSceneToLoad;
+
 
 	void Awake()
 	{
@@ -54,7 +50,6 @@ public class FirebaseManager : MonoBehaviour
 	void Start()
 	{
 		StartCoroutine(CheckAndFixDependenciesRoutine());
-		nextSceneToLoad = UnitySceneManager.GetActiveScene().buildIndex + 1;
 	}
 
 	// FirebaseAuth 인스턴스 객체 설정
@@ -145,7 +140,7 @@ public class FirebaseManager : MonoBehaviour
 
 			// 회원가입 에러
 			if (RegisterTask.Exception != null)
-			{         
+			{
 				FirebaseException firebaseEx = RegisterTask.Exception.GetBaseException() as FirebaseException;
 				AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
 
@@ -184,7 +179,7 @@ public class FirebaseManager : MonoBehaviour
 				yield return new WaitUntil(predicate: () => Tree.IsCompleted);
 
 				yield return new WaitUntil(predicate: () => RegisterTask.IsCompleted);
-				
+
 				// TODO : 로그인 UI 활성화
 				//UIManager.Instance.LoginScreen();
 				registerErrorText.text = "";
@@ -211,31 +206,10 @@ public class FirebaseManager : MonoBehaviour
 
 		// 로그인 에러
 		if (LoginTask.Exception != null)
-		{       
+		{
 			FirebaseException firebaseEx = LoginTask.Exception.GetBaseException() as FirebaseException;
-			AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
 
-			string message = "Login failed check internet connection!";
-			switch (errorCode)
-			{
-				case AuthError.MissingEmail:
-					message = "Missing Email";
-					break;
-				case AuthError.MissingPassword:
-					message = "Missing Password";
-					break;
-				case AuthError.WrongPassword:
-					message = "Wrong Password";
-					break;
-				case AuthError.InvalidEmail:
-					message = "Invalid Email";
-					break;
-				case AuthError.UserNotFound:
-					message = "Account does not exist";
-					break;
-			}
-
-			loginErrorText.text = message;
+			loginErrorText.text = "Login Error";
 			yield return new WaitForSeconds(3);
 			loginErrorText.text = "";
 		}
@@ -245,14 +219,13 @@ public class FirebaseManager : MonoBehaviour
 			user = LoginTask.Result.User;
 			Debug.LogFormat("로그인 성공 : {0} ({1})", user.DisplayName, user.Email);
 			loginErrorText.text = "";
-			loginSuccessText.text = "Success Log In";
-			//StartCoroutine(LoadData());
+			loginSuccessText.text = "Success LogIn";
+
 			yield return new WaitForSeconds(1);
 
 			TitleScene.Title.LoginSucces();
-			//PlayerPrefs.SetString("Name", Username.text);
-			loginSuccessText.text = "";
 
+			loginSuccessText.text = "";
 		}
 	}
 
@@ -260,7 +233,33 @@ public class FirebaseManager : MonoBehaviour
 	public void LogOut()
 	{
 		auth.SignOut();
+
+		DeleteLoginFeild();
+		DeleteRegisterFeild();
+
+		TitleScene.Title.LoginUI();
+
 		Debug.Log("로그아웃");
+	}
+
+	// 패스워드 재설정
+	public void ResetPassowrd()
+	{
+		StartCoroutine(ResetPasswordRoutine(resetPasswordEmail.text));
+	}
+
+	// 패스워드 재설정 코루틴
+	IEnumerator ResetPasswordRoutine(string _emailAddress)
+	{	
+		var LoginTask = auth.SendPasswordResetEmailAsync(_emailAddress);
+
+		yield return new WaitUntil(predicate: () => LoginTask.IsCompleted);
+
+		resetPasswordErrorText.text = "";
+		resetPasswordSuccessText.text = "Reset code send successfully";
+		yield return new WaitForSeconds(3);
+		resetPasswordSuccessText.text = "";
+
 	}
 }
 
