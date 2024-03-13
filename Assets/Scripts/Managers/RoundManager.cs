@@ -159,6 +159,6 @@ public class RoundManager : MonoBehaviour
 			star0.SetActive(true);
 		}
 
-		SoundManager.sound.PlayResult();
+		SoundManager.sound.PlayResult();	
 	}
 }
