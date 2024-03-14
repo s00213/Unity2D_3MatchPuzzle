@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public class FirebaseManager : MonoBehaviour
 {
@@ -40,6 +41,8 @@ public class FirebaseManager : MonoBehaviour
 	private int level = 1;
 	private int point;
 
+	private string scene;
+
 	void Awake()
 	{
 		Instance = this;
@@ -48,6 +51,8 @@ public class FirebaseManager : MonoBehaviour
 	void Start()
 	{
 		StartCoroutine(CheckAndFixDependenciesRoutine());
+
+		TitleScene.instance.LoginUI();
 	}
 
 	// FirebaseAuth 인스턴스 객체 설정
@@ -219,7 +224,7 @@ public class FirebaseManager : MonoBehaviour
 
 			yield return new WaitForSeconds(1);
 
-			TitleScene.Instance.LoginSucces();
+			TitleScene.instance.LoginSucces();
 			loginSuccessText.text = "";
 		}
 	}
@@ -232,7 +237,7 @@ public class FirebaseManager : MonoBehaviour
 		DeleteLoginFeild();
 		DeleteRegisterFeild();
 
-		TitleScene.Instance.LoginUI();
+		TitleScene.instance.LoginUI();
 
 		Debug.Log("로그아웃");
 	}

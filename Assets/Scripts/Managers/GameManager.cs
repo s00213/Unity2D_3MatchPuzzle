@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Resources;
 using UnityEditor.EditorTools;
 using UnityEngine;
-using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +11,6 @@ public class GameManager : MonoBehaviour
 	static PoolManager poolManager;
 	static UIManager uiManager;
 	static SceneManager sceneManager;
-
 	public static GameManager Instance { get { return instance; } }
 	public static ResourceManager Resource { get { return resourceManager; } }
 	public static PoolManager Pool { get { return poolManager; } }

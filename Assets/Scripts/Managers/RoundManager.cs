@@ -89,7 +89,7 @@ public class RoundManager : MonoBehaviour
 	{
 		Time.timeScale = 1f;
 		UnitySceneManager.LoadScene(TitleSceneToLoad);
-		TitleScene.Instance.LoginSucces();
+		TitleScene.instance.LoginSucces();
 	}
 
 	public void QuitButton()

@@ -4,18 +4,14 @@ using Firebase;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Resources;
 
 public class TitleScene : MonoBehaviour
 {
 	public static TitleScene instance;
 
-	public static TitleScene Instance { get { return instance; } }
-
 	public GameObject loginUI;
 	public GameObject registerUI;
 	public GameObject titleUI;
-	public GameObject levelSelectUI;
 
 	void Awake()
 	{
@@ -26,17 +22,8 @@ public class TitleScene : MonoBehaviour
 		}
 
 		instance = this;
-		DontDestroyOnLoad(this.gameObject);
-	}
 
-	void OnDestroy()
-	{
-		if (instance == this)
-			instance = null;
-	}
-
-	private void Start()
-	{
+		AudioSource audioSource = GetComponent<AudioSource>();
 	}
 
 	public void QuitGame()
@@ -69,12 +56,5 @@ public class TitleScene : MonoBehaviour
 	{
 		ClearUI();
 		titleUI.SetActive(true);
-	}
-
-	public void LevelSelectUI()
-	{
-		ClearUI();
-		titleUI.SetActive(true);
-		levelSelectUI.SetActive(true);
 	}
 }

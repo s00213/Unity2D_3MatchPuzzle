@@ -6,9 +6,8 @@ using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 public class Scene : MonoBehaviour
 {
 	public string replayScene;
+	public AudioSource audioSource;
 
-	private int Level = 1;
-	
 	public void Back(int sceneID)
 	{
 		UnitySceneManager.LoadScene(sceneID);

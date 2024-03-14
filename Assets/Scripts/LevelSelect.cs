@@ -8,8 +8,6 @@ public class LevelSelect : MonoBehaviour
 {
 	public Button[] levelButtons;
 
-	public string titleScene = "TitleScene";
-
 	private void Awake()
 	{
 		int unlockLevel = PlayerPrefs.GetInt("unlockLevel", 1);
