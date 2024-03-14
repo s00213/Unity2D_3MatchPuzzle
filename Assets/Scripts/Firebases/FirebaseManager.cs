@@ -1,3 +1,4 @@
+using UnityEngine;
 using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
@@ -5,10 +6,7 @@ using Firebase.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using TMPro;
-using UnityEditor.PackageManager;
-using UnityEngine;
 
 public class FirebaseManager : MonoBehaviour
 {
@@ -35,12 +33,12 @@ public class FirebaseManager : MonoBehaviour
 
 	[Header("Reset Password")]
 	public TMP_InputField resetPasswordEmail;
-	public TMP_Text resetPasswordSuccessText;
-	public TMP_Text resetPasswordErrorText;
+	public TMP_Text resetPasswordText;
 
-	TitleScene titleScene;
+	RoundManager roundManager;
 
-
+	private int level = 1;
+	private int point;
 
 	void Awake()
 	{
@@ -180,8 +178,6 @@ public class FirebaseManager : MonoBehaviour
 
 				yield return new WaitUntil(predicate: () => RegisterTask.IsCompleted);
 
-				// TODO : 로그인 UI 활성화
-				//UIManager.Instance.LoginScreen();
 				registerErrorText.text = "";
 				registerErrorText.text = "";
 				Debug.Log("회원가입 성공함");
@@ -223,8 +219,7 @@ public class FirebaseManager : MonoBehaviour
 
 			yield return new WaitForSeconds(1);
 
-			TitleScene.Title.LoginSucces();
-
+			TitleScene.Instance.LoginSucces();
 			loginSuccessText.text = "";
 		}
 	}
@@ -237,7 +232,7 @@ public class FirebaseManager : MonoBehaviour
 		DeleteLoginFeild();
 		DeleteRegisterFeild();
 
-		TitleScene.Title.LoginUI();
+		TitleScene.Instance.LoginUI();
 
 		Debug.Log("로그아웃");
 	}
@@ -255,11 +250,9 @@ public class FirebaseManager : MonoBehaviour
 
 		yield return new WaitUntil(predicate: () => LoginTask.IsCompleted);
 
-		resetPasswordErrorText.text = "";
-		resetPasswordSuccessText.text = "Reset code send successfully";
+		resetPasswordText.text = "Reset code send successfully";
 		yield return new WaitForSeconds(3);
-		resetPasswordSuccessText.text = "";
-
+		resetPasswordText.text = "";
 	}
 }
 

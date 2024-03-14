@@ -5,15 +5,13 @@ using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public class Scene : MonoBehaviour
 {
-	public string levelSelectScene = "LevelSelectScene";
 	public string replayScene;
 
-	public void ReturnLevelSelectScene()
+	private int Level = 1;
+	
+	public void Back(int sceneID)
 	{
-		//GameManager.Scene.LoadScene("LevelSelectScene");
-		//GameManager.Scene.LoadScene("GameScene");
-
-		UnitySceneManager.LoadScene(levelSelectScene);
+		UnitySceneManager.LoadScene(sceneID);
 	}
 
 	public void Replay()

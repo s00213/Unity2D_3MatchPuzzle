@@ -2,20 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.VFX;
-
+using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public class SoundManager : MonoBehaviour
 {
-	public static SoundManager sound;
+	public static SoundManager Sound;
 
-	public AudioSource MatchSound, puzzleClickSound, BrickSound, BombSound, resultSound, comboSound, shuffleSound;
+	public AudioSource MatchSound, puzzleClickSound, BrickSound, resultSound, comboSound, shuffleSound;
 
-	
 	void Awake()
 	{
-		sound = this;
+		Sound = this;
 	}
 
 	public void PlayMatch()
@@ -36,19 +33,13 @@ public class SoundManager : MonoBehaviour
 		BrickSound.Play();
 	}
 
-	public void PlayBomb()
-	{
-		BombSound.Stop();
-		BombSound.Play();
-	}
-
 	public void PlayResult()
 	{
 		resultSound.Stop();
 		resultSound.Play();
 	}
 
-	public void PlayCombo() 
+	public void PlayCombo()
 	{
 		comboSound.Stop();
 		comboSound.Play();

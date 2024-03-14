@@ -245,8 +245,6 @@ MonoBehaviour:
   comboAmount: 2
   comboText: {fileID: 919489888}
   displayComboTime: 3
-  appleBomb: {fileID: 7577605039827428986, guid: 23ab929890c9b574c92174237b885940, type: 3}
-  appleBombChance: 2
   puzzles:
   - {fileID: 1003480595377931992, guid: 42fca94760e50e6409eafff26850c122, type: 3}
   - {fileID: 5656477307368254474, guid: 2457556564a03fc4a9804e65736c9eac, type: 3}
@@ -257,9 +255,6 @@ MonoBehaviour:
   - {fileID: 8891793043950976280, guid: 8fa2da6d34667144693d39aaf3e9c8bf, type: 3}
   - {fileID: 5656477307368254474, guid: 2457556564a03fc4a9804e65736c9eac, type: 3}
   - {fileID: 1003480595377931992, guid: 88206df9e8b29bb45b094ddc5e656126, type: 3}
-  - {fileID: 7577605039827428986, guid: 23ab929890c9b574c92174237b885940, type: 3}
-  - {fileID: 5656477307368254474, guid: e4746b74749e9b242bd28e3aed08b9db, type: 3}
-  - {fileID: 5656477307368254474, guid: fe3f4d5c1ffe3334f8d65cf0489a7099, type: 3}
 --- !u!1 &334394758 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5459005335769874696, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
@@ -487,6 +482,7 @@ MonoBehaviour:
   timeText: {fileID: 1357154491}
   scoreText: {fileID: 137488605}
   resultScoreText: {fileID: 1634229021}
+  levelText: {fileID: 5459005336053150864}
   star0: {fileID: 1190016283}
   star1: {fileID: 1358033119}
   stars2: {fileID: 1969322362}
@@ -499,7 +495,7 @@ MonoBehaviour:
   scoreTarget1: 300
   scoreTarget2: 700
   scoreTarget3: 1300
-  LevelSelectToLoad: LevelSelectScene
+  TitleSceneToLoad: 
   pauseUI: {fileID: 5459005336053150863}
   ResultUI: {fileID: 334394758}
 --- !u!4 &1022521204
@@ -708,7 +704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37e1b438ff219e74e9ad71ea0f8b2bac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelSelectScene: LevelSelectScene
+  nextscene: TitleScene
   replayScene: Level3
 --- !u!4 &1631188782
 Transform:
@@ -1001,6 +997,18 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: PauseButton
       objectReference: {fileID: 0}
+    - target: {fileID: 3714993785587633625, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
+      propertyPath: m_text
+      value: Level3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3714993785587633625, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
+      propertyPath: m_margin.z
+      value: 836.70905
+      objectReference: {fileID: 0}
+    - target: {fileID: 3714993785587633625, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3805836132997381971, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1080,6 +1088,10 @@ PrefabInstance:
     - target: {fileID: 4911456900142225400, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -449.48407
+      objectReference: {fileID: 0}
+    - target: {fileID: 5021247057093532035, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -682.6667
       objectReference: {fileID: 0}
     - target: {fileID: 5437576843220614146, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
       propertyPath: m_Controller
@@ -1189,6 +1201,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5459005336359188945, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 467.5555
+      objectReference: {fileID: 0}
     - target: {fileID: 5459005336359188974, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
       propertyPath: m_text
       value: Combo 000
@@ -1232,10 +1248,14 @@ PrefabInstance:
     - target: {fileID: 6490776553879280754, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1022521203}
+      objectReference: {fileID: 1631188781}
     - target: {fileID: 6490776553879280754, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LevelSelectButton
+      value: Next
+      objectReference: {fileID: 0}
+    - target: {fileID: 6490776553879280754, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Scene, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7265288946014457143, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1283,7 +1303,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7596516222535209554, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ReturnLevelSelectScene
+      value: Next
       objectReference: {fileID: 0}
     - target: {fileID: 7596516222535209554, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1420,3 +1440,14 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7529533509522140555, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
   m_PrefabInstance: {fileID: 5459005336053150862}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5459005336053150864 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3714993785587633625, guid: f35da08bb3378c44eb20350949aa00ad, type: 3}
+  m_PrefabInstance: {fileID: 5459005336053150862}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

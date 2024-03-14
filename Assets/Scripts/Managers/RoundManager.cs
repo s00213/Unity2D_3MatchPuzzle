@@ -1,9 +1,13 @@
+using Firebase.Auth;
+using Firebase.Database;
+using Firebase;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
+using System;
 
 public class RoundManager : MonoBehaviour
 {
@@ -11,26 +15,34 @@ public class RoundManager : MonoBehaviour
 	public TextMeshProUGUI timeText;
 	public TextMeshProUGUI scoreText;
 	public TextMeshProUGUI resultScoreText;
+	public TextMeshProUGUI levelText;
 	public GameObject star0, star1, stars2, stars3;
+
 	[Header("Timer")]
 	public float roundTime;
 	public Slider timerSlider;
+
 	[Header("Score")]
 	public int curScore;
 	public float displayScore;
-	public float scoreSpeed; //스코어가 업데이트되는 속도
+	public float scoreSpeed;
 	public int scoreTarget1, scoreTarget2, scoreTarget3;
+
 	[Header("Pause")]
-	public string LevelSelectToLoad;
+	public string TitleSceneToLoad;
 	public GameObject pauseUI;
-   [Header("Game Over")]
+
+    [Header("Game Over")]
 	public GameObject ResultUI;
 
 	Board board;
 
 	bool roundEnd = false;
 
-	
+	private int level = 1;
+	private int point;
+	private int nextSceneToLoad;
+
 	void Awake()
 	{
 		board = FindObjectOfType<Board>();
@@ -44,7 +56,7 @@ public class RoundManager : MonoBehaviour
 		stars3.SetActive(false);
 
 		timerSlider.maxValue = roundTime;
-		timerSlider.value = roundTime;
+		timerSlider.value = roundTime;	
 	}
 
 	void Update()
@@ -58,7 +70,6 @@ public class RoundManager : MonoBehaviour
 	{
 		board.ShufflePuzzles();
 	}
-
 
 	public void PauseButton()
 	{
@@ -77,7 +88,8 @@ public class RoundManager : MonoBehaviour
 	public void LevelSelectButton()
 	{
 		Time.timeScale = 1f;
-		UnitySceneManager.LoadScene(LevelSelectToLoad);
+		UnitySceneManager.LoadScene(TitleSceneToLoad);
+		TitleScene.Instance.LoginSucces();
 	}
 
 	public void QuitButton()
@@ -124,6 +136,9 @@ public class RoundManager : MonoBehaviour
 
 		resultScoreText.text = curScore.ToString();
 
+		UpdateLevelData();
+		UpdateScoreData();
+
 		if (curScore >= scoreTarget3)
 		{
 			stars3.SetActive(true);
@@ -159,6 +174,38 @@ public class RoundManager : MonoBehaviour
 			star0.SetActive(true);
 		}
 
-		SoundManager.sound.PlayResult();	
+		SoundManager.Sound.PlayResult();
+	}
+
+	void UpdateLevelData()
+	{
+		var user = Firebase.Auth.FirebaseAuth.DefaultInstance.CurrentUser;
+		if (user != null)
+		{
+			var DBReference = Firebase.Database.FirebaseDatabase.DefaultInstance.RootReference;
+
+			int level;
+			string levelNumberStr = levelText.text.Substring(5);
+
+			if (int.TryParse(levelNumberStr, out level))
+			{
+				DBReference.Child("User").Child(user.UserId).Child("Level").SetValueAsync(level);
+			}
+			else
+			{
+				Debug.LogError("Level text is not a valid integer.");
+			}
+		}
+	}
+
+	void UpdateScoreData()
+	{
+		var user = Firebase.Auth.FirebaseAuth.DefaultInstance.CurrentUser;
+		if (user != null)
+		{
+			var DBReference = Firebase.Database.FirebaseDatabase.DefaultInstance.RootReference;
+
+			DBReference.Child("User").Child(user.UserId).Child("Point").SetValueAsync(curScore);
+		}
 	}
 }

@@ -8,7 +8,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public enum PuzzleType 
 	{ 
 		Bear, Chick, Crocodile, Narwhal, Panda, Parrot, Penguin, Pig,
-		Brick, AppleBomb, Blueberry, Grape
+		Brick
 	}
 	public PuzzleType type;
 
@@ -155,7 +155,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 			posIndex.y--;
 		}
 
-		// 교환할 퍼즐이 없는 경우
+		// 교환할 퍼즐이 없는 경우 리턴
 		if (otherPuzzle == null)
 		{
 			return;
@@ -165,7 +165,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		board.allPuzzles[otherPuzzle.posIndex.x, otherPuzzle.posIndex.y] = otherPuzzle;
 
 		StartCoroutine(CheckMoveRoutine());
-		SoundManager.sound.PlayPuzzleClick();
+		SoundManager.Sound.PlayPuzzleClick();
 	}
 
 	void ExchangePuzzles()

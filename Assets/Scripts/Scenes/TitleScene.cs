@@ -1,37 +1,42 @@
+using Firebase.Auth;
+using Firebase.Database;
+using Firebase;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
+using System.Resources;
 
 public class TitleScene : MonoBehaviour
 {
-	public static TitleScene Title;
-	public string GameScene;
+	public static TitleScene instance;
+
+	public static TitleScene Instance { get { return instance; } }
+
 	public GameObject loginUI;
 	public GameObject registerUI;
 	public GameObject titleUI;
+	public GameObject levelSelectUI;
 
-	private void Awake()
+	void Awake()
 	{
-		if (Title == null)
+		if (instance != null)
 		{
-			Title = this;
-		}
-		else if (Title != null)
-		{
-			Debug.Log("Instance already exists, destroying object!");
 			Destroy(this);
+			return;
 		}
+
+		instance = this;
+		DontDestroyOnLoad(this.gameObject);
 	}
 
-	public void StartGame()
+	void OnDestroy()
 	{
-		UnitySceneManager.LoadScene(GameScene);
+		if (instance == this)
+			instance = null;
 	}
 
-	public void LoadGame()
+	private void Start()
 	{
-		Debug.Log("Load Game");
 	}
 
 	public void QuitGame()
@@ -52,6 +57,7 @@ public class TitleScene : MonoBehaviour
 		loginUI.SetActive(true);
 		registerUI.SetActive(false);
 	}
+
 	public void RegisterUI()
 	{
 		ClearUI();
@@ -63,5 +69,12 @@ public class TitleScene : MonoBehaviour
 	{
 		ClearUI();
 		titleUI.SetActive(true);
+	}
+
+	public void LevelSelectUI()
+	{
+		ClearUI();
+		titleUI.SetActive(true);
+		levelSelectUI.SetActive(true);
 	}
 }

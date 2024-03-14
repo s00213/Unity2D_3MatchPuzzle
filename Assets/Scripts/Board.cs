@@ -19,14 +19,12 @@ public class Board : MonoBehaviour
 	public float puzzleSpeed;
 	public GameObject BackgroundTilePrefab;
 	public Button shuffleButton;
+	[Space]
 	[Header("Bonus")]
 	public float combo;
 	public float comboAmount = 1.5f;
 	public TextMeshProUGUI comboText;
 	public float displayComboTime = 2.0f;
-	[Header("Apple Bomb")]
-	public Puzzle appleBomb;
-	public float appleBombChance;
 	[Space]
 	public Puzzle[] puzzles;
 	public Puzzle[,] allPuzzles;
@@ -134,15 +132,11 @@ public class Board : MonoBehaviour
 			{
 				if (allPuzzles[pos.x, pos.y].type == Puzzle.PuzzleType.Brick)
 				{
-					SoundManager.sound.PlayBrick();
-				}
-				else if (allPuzzles[pos.x, pos.y].type == Puzzle.PuzzleType.AppleBomb)
-				{
-					SoundManager.sound.PlayBomb();
+					SoundManager.Sound.PlayBrick();
 				}
 				else
 				{
-					SoundManager.sound.PlayMatch();
+					SoundManager.Sound.PlayMatch();
 				}
 
 				Instantiate(allPuzzles[pos.x, pos.y].destroyEffect, new Vector2(pos.x, pos.y), Quaternion.identity);
@@ -326,7 +320,7 @@ public class Board : MonoBehaviour
 				}
 
 				shuffleCount++;
-				SoundManager.sound.PlayShuffle();
+				SoundManager.Sound.PlayShuffle();
 
 				if (shuffleCount >= 3)
 				{
@@ -361,7 +355,7 @@ public class Board : MonoBehaviour
 		comboText.text = "COMBO " + combo.ToString("0");
 
 		comboText.gameObject.SetActive(true);
-		SoundManager.sound.PlayCombo();
+		SoundManager.Sound.PlayCombo();
 
 		StartCoroutine(DisplayComboTextRoutine());
 	}
