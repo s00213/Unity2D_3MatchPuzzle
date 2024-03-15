@@ -12,6 +12,7 @@ public class TitleScene : MonoBehaviour
 	public GameObject loginUI;
 	public GameObject registerUI;
 	public GameObject titleUI;
+	public GameObject levelSelectUI;
 
 	void Awake()
 	{
@@ -22,8 +23,6 @@ public class TitleScene : MonoBehaviour
 		}
 
 		instance = this;
-
-		AudioSource audioSource = GetComponent<AudioSource>();
 	}
 
 	public void QuitGame()
@@ -56,5 +55,11 @@ public class TitleScene : MonoBehaviour
 	{
 		ClearUI();
 		titleUI.SetActive(true);
+	}
+
+	public void LevelSelectUI()
+	{
+		ClearUI();
+		levelSelectUI.SetActive(true);
 	}
 }

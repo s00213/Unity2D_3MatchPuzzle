@@ -24,10 +24,12 @@ public class LevelSelect : MonoBehaviour
 	{
 		UnitySceneManager.LoadScene(UnitySceneManager.GetActiveScene().buildIndex + 1);
 	}
+
 	public void Level2()
 	{
 		UnitySceneManager.LoadScene(UnitySceneManager.GetActiveScene().buildIndex + 2);
 	}
+
 	public void Level3()
 	{
 		UnitySceneManager.LoadScene(UnitySceneManager.GetActiveScene().buildIndex + 3);

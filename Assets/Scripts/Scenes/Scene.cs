@@ -6,18 +6,24 @@ using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 public class Scene : MonoBehaviour
 {
 	public string replayScene;
-	public AudioSource audioSource;
+	public string sceneName;
 
 	public void Back(int sceneID)
 	{
-		UnitySceneManager.LoadScene(sceneID);
+		Time.timeScale = 1f;
+
+		UnitySceneManager.LoadScene(sceneName);
 	}
 
 	public void Replay()
 	{
-		//GameManager.Scene.LoadScene("LevelSelectScene");
-		//GameManager.Scene.LoadScene("GameScene");
+		Time.timeScale = 1f;
 
 		UnitySceneManager.LoadScene(replayScene);
+	}
+
+	public void Next()
+	{
+		UnitySceneManager.LoadScene(UnitySceneManager.GetActiveScene().buildIndex + 1);
 	}
 }

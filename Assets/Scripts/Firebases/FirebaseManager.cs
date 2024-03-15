@@ -36,13 +36,6 @@ public class FirebaseManager : MonoBehaviour
 	public TMP_InputField resetPasswordEmail;
 	public TMP_Text resetPasswordText;
 
-	RoundManager roundManager;
-
-	private int level = 1;
-	private int point;
-
-	private string scene;
-
 	void Awake()
 	{
 		Instance = this;
@@ -50,9 +43,7 @@ public class FirebaseManager : MonoBehaviour
 
 	void Start()
 	{
-		StartCoroutine(CheckAndFixDependenciesRoutine());
-
-		TitleScene.instance.LoginUI();
+		StartCoroutine(CheckAndFixDependenciesRoutine());			
 	}
 
 	// FirebaseAuth 인스턴스 객체 설정
@@ -94,6 +85,10 @@ public class FirebaseManager : MonoBehaviour
 		{
 			bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null;
 			user = auth.CurrentUser;
+		}
+		else
+		{
+			TitleScene.instance.LoginUI();
 		}
 	}
 

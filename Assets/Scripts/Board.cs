@@ -332,6 +332,42 @@ public class Board : MonoBehaviour
 		}
 	}
 
+	// 교착 상태 확인
+	bool IsStuck()
+	{
+		for (int x = 0; x < width; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				Puzzle puzzle = allPuzzles[x, y];
+
+				// 가로에 있는 퍼즐과 비교함
+				if (x < width - 1)
+				{
+					// 오른쪽 퍼즐과 퍼즐 타입이 같다면 교착 상태가 아님
+					Puzzle rightPuzzle = allPuzzles[x + 1, y];
+					if (puzzle.type == rightPuzzle.type)
+					{
+						return false;
+					}
+				}
+
+				// 세로에 있는 퍼즐과 비교함
+				if (y > 0)
+				{
+					// 아래 퍼즐과 퍼즐 타입이 같다면 교착 상태가 아님
+					Puzzle downPuzzle = allPuzzles[x, y - 1];
+					if (puzzle.type == downPuzzle.type)
+					{
+						return false;
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
 	// 퍼즐의 스코어를 확인하고 현재 스코어를 업데이트함
 	public void CheckScore(Puzzle puzzleToCheck)
 	{
@@ -366,4 +402,3 @@ public class Board : MonoBehaviour
 		comboText.gameObject.SetActive(false);
 	}
 }
-
