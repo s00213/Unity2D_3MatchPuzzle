@@ -335,7 +335,6 @@ MonoBehaviour:
   scoreTarget1: 100
   scoreTarget2: 500
   scoreTarget3: 1000
-  TitleSceneToLoad: TitleScene
   pauseUI: {fileID: 1070298208}
   ResultUI: {fileID: 453351288}
 --- !u!4 &639307192
@@ -1238,14 +1237,16 @@ MonoBehaviour:
   puzzleSpeed: 10
   BackgroundTilePrefab: {fileID: 1903346692537623246, guid: 147a3d6d31076914fb73c2cef7cfa935, type: 3}
   shuffleButton: {fileID: 1942053400}
-  combo: 0
-  comboAmount: 2
-  comboText: {fileID: 770168117}
-  displayComboTime: 2.8
+  bomb: {fileID: 1003480595377931992, guid: 4cf63abd0701ae44fb0288504ba8fd78, type: 3}
+  bombPercentage: 0
   puzzles:
   - {fileID: 1003480595377931992, guid: 42fca94760e50e6409eafff26850c122, type: 3}
   - {fileID: 5656477307368254474, guid: 2457556564a03fc4a9804e65736c9eac, type: 3}
   - {fileID: 8262001238211741758, guid: e6274074bf3af2e499f494c1c926cc66, type: 3}
+  combo: 0
+  comboAmount: 2
+  comboText: {fileID: 770168117}
+  displayComboTime: 2.8
 --- !u!4 &1127080733
 Transform:
   m_ObjectHideFlags: 0
