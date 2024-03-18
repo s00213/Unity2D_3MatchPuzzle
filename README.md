@@ -27,7 +27,7 @@
 
 ```sh
 1. Firebase의 Authentication를 이용한 회원가입
-2. Firebase의 Authentication를 이용한 로그 인, 로그 아웃
+2. Firebase의 Authentication를 이용한 로그인, 로그아웃
 3. Firebase의 Authentication를 이용한 비밀번호 재설정
 4. Firebase의 Realtime Database를 이용한 순위표
 5. 점수 시스템, 레벨 언락 시스템
