@@ -185,7 +185,7 @@ MonoBehaviour:
   BackgroundTilePrefab: {fileID: 1903346692537623246, guid: 147a3d6d31076914fb73c2cef7cfa935, type: 3}
   shuffleButton: {fileID: 906150602}
   bomb: {fileID: 1003480595377931992, guid: 4cf63abd0701ae44fb0288504ba8fd78, type: 3}
-  bombPercentage: 2
+  bombPercentage: 10
   puzzles:
   - {fileID: 1003480595377931992, guid: 42fca94760e50e6409eafff26850c122, type: 3}
   - {fileID: 5656477307368254474, guid: 2457556564a03fc4a9804e65736c9eac, type: 3}

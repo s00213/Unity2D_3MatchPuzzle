@@ -53,7 +53,6 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		if (board.curStatus == Board.BoardStatus.Move && roundManager.roundTime > 0)
 		{
 			firstTouchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			Debug.Log("Down");
 		}
 	}
 
