@@ -20,23 +20,6 @@ public class RankBoard : MonoBehaviour
 
 	void Start()
 	{
-		//FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-		//{
-		//	dependencyStatus = task.Result;
-		//	if (dependencyStatus == DependencyStatus.Available)
-		//	{
-		//		// Firebase 초기화 및 의존성 확인이 완료된 후에 DBreference 초기화
-		//		DBreference = Firebase.Database.FirebaseDatabase.DefaultInstance.RootReference;
-
-		//		// DBreference가 올바르게 초기화된 후에 GetTopUsersByLevel() 호출
-		//		GetTopUsersByLevel();
-		//	}
-		//	else
-		//	{
-		//		Debug.LogError("Firebase 초기화 및 의존성 확인 실패");
-		//	}
-		//});
-
 		StartCoroutine(CheckAndFixDependenciesRoutine());
 	}
 

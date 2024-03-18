@@ -18,15 +18,18 @@ public class Board : MonoBehaviour
 	public float puzzleSpeed;
 	public GameObject BackgroundTilePrefab;
 	public Button shuffleButton;
-	[Space]
-	[Header("Bonus")]
+	[Header("Bomb")]
+	public Puzzle bomb;
+	public float bombPercentage = 2.0f; // bomb이 나올 확률
+	[Header("Puzzles")]
+	public Puzzle[] puzzles;
+	public Puzzle[,] allPuzzles;
+	[Header("Combo")]
 	public float combo;
 	public float comboAmount = 1.5f;
 	public TextMeshProUGUI comboText;
 	public float displayComboTime = 2.0f;
-	[Space]
-	public Puzzle[] puzzles;
-	public Puzzle[,] allPuzzles;
+
 
 	MatchManager matchManager;
 	RoundManager roundManager;
@@ -84,6 +87,11 @@ public class Board : MonoBehaviour
 
 	void SpawnPuzzles(Vector2Int pos, Puzzle puzzleToSpawn)
 	{
+		if (Random.Range(0f, 100f) < bombPercentage)
+		{
+			puzzleToSpawn = bomb;
+		}
+	
 		Puzzle puzzle = Instantiate(puzzleToSpawn, new Vector3(pos.x, pos.y + height, 0f), Quaternion.identity);
 
 		puzzle.transform.parent = transform;

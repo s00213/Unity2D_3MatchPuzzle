@@ -8,7 +8,7 @@ public class Puzzle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public enum PuzzleType 
 	{ 
 		Bear, Chick, Crocodile, Narwhal, Panda, Parrot, Penguin, Pig,
-		Brick
+		Brick, Bomb
 	}
 	public PuzzleType type;
 

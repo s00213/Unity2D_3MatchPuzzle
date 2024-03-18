@@ -23,7 +23,6 @@ public class RoundManager : MonoBehaviour
 	public int scoreTarget1, scoreTarget2, scoreTarget3;
 
 	[Header("Pause")]
-	public string TitleSceneToLoad;
 	public GameObject pauseUI;
 
     [Header("Game Over")]
@@ -77,19 +76,6 @@ public class RoundManager : MonoBehaviour
 			pauseUI.SetActive(false);
 			Time.timeScale = 1f;
 		}
-	}
-
-	public void LevelSelectButton()
-	{
-		Time.timeScale = 1f;
-		UnitySceneManager.LoadScene(TitleSceneToLoad);
-		TitleScene.instance.LoginSucces();
-	}
-
-	public void QuitButton()
-	{
-		Application.Quit();
-		Debug.Log("Quit Game");
 	}
 
 	void Timer()
