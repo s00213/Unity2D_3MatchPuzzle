@@ -1,13 +1,9 @@
-using UnityEngine;
 using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
-using Firebase.Extensions;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
+using UnityEngine;
 
 public class FirebaseManager : MonoBehaviour
 {

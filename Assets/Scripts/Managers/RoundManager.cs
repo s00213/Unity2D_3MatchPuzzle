@@ -1,13 +1,7 @@
-using Firebase.Auth;
-using Firebase.Database;
-using Firebase;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
-using System;
 
 public class RoundManager : MonoBehaviour
 {

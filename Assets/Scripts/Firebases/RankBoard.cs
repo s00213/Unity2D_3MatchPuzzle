@@ -20,9 +20,22 @@ public class RankBoard : MonoBehaviour
 
 	void Start()
     {
-		DBreference = Firebase.Database.FirebaseDatabase.DefaultInstance.RootReference;
-		
-		GetTopUsersByLevel();
+		FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+		{
+			dependencyStatus = task.Result;
+			if (dependencyStatus == DependencyStatus.Available)
+			{
+				// Firebase 초기화 및 의존성 확인이 완료된 후에 DBreference 초기화
+				DBreference = Firebase.Database.FirebaseDatabase.DefaultInstance.RootReference;
+
+				// DBreference가 올바르게 초기화된 후에 GetTopUsersByLevel() 호출
+				GetTopUsersByLevel();
+			}
+			else
+			{
+				Debug.LogError("Firebase 초기화 및 의존성 확인 실패");
+			}
+		});		
 	}
 
 	// Firebase에서 레벨별로 정렬된 상위 5명의 사용자 데이터를 가져옴

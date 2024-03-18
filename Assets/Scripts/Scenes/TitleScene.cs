@@ -1,8 +1,3 @@
-using Firebase.Auth;
-using Firebase.Database;
-using Firebase;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TitleScene : MonoBehaviour
