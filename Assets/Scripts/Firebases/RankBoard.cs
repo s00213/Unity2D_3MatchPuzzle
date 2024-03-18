@@ -58,14 +58,15 @@ public class RankBoard : MonoBehaviour
 
 	private void ProcessData(DataSnapshot snapshot)
 	{
-		// 레벨이 높은 순서로 정렬함
+		// 랭킹 정보를 담을 리스트를 생성함
 		var rankList = new List<(string, int, int)>();
 
 		Debug.Log("Snapshot Children Count: " + snapshot.ChildrenCount.ToString());
 
-		// 레벨이 높은 순서로 데이터를 처리함
-		foreach (var child in snapshot.Children.Reverse())
+		// 각 자식 노드에 대해 반복함
+		foreach (var child in snapshot.Children)
 		{
+			// 각 사용자의 이름, 레벨, 포인트를 가져와 변수에 저장함
 			string username = child.Child("Username").Value.ToString();
 			int level = int.Parse(child.Child("Level").Value.ToString());
 			int point = int.Parse(child.Child("Point").Value.ToString());
@@ -74,20 +75,24 @@ public class RankBoard : MonoBehaviour
 			Debug.Log("Level: " + level);
 			Debug.Log("Point: " + point);
 
+			// 사용자 정보를 랭킹 리스트에 추가함
 			rankList.Add((username, level, point));
 		}
 
-		// 레벨이 같은 사용자를 점수가 높은 순서로 정렬함
-		rankList = rankList.OrderBy(x => x.Item2).ThenByDescending(x => x.Item3).ToList();
+		// 레벨이 높은 순서대로 가져오되, 레벨이 같은 경우에는 점수가 높은 순서로 데이터를 가져옴
+		rankList = rankList.OrderByDescending(x => x.Item2).ThenByDescending(x => x.Item3).ToList();
 		Debug.Log("Rank List Count: " + rankList.Count);
 
+		// 랭킹 보드에 표시할 문자열을 생성함
 		string rankBoardString = "";
+		
 		for (int i = 0; i < rankList.Count; i++)
 		{
 			var user = rankList[i];
 			int rank = i + 1;
 			rankBoardString += $"{rank}. {user.Item1} Level{user.Item2} Point {user.Item3}\n\n";
 		}
+
 		rankBoardText.text = rankBoardString;
 	}
 }
