@@ -65,10 +65,26 @@ public class FirebaseManager : MonoBehaviour
 		if (dependencyResult == DependencyStatus.Available)
 		{
 			InitializeFirebase();
+
+			// FirebaseAuth 인스턴스가 초기화된 후, 로그인 상태를 확인하여 씬을 전환함
+			CheckLoginState();
 		}
 		else
 		{
 			Debug.LogError("모든 Firebase 종속성을 해결할 수 없음 : " + dependencyStatus);
+		}
+	}
+
+	// 로그인 상태 확인 및 씬 전환
+	void CheckLoginState()
+	{
+		if (auth.CurrentUser != null)
+		{
+			TitleScene.instance.LoginSucces();
+		}
+		else
+		{
+			TitleScene.instance.LoginUI();
 		}
 	}
 
@@ -81,10 +97,12 @@ public class FirebaseManager : MonoBehaviour
 		{
 			bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null;
 			user = auth.CurrentUser;
-		}
-		else
-		{
-			TitleScene.instance.LoginUI();
+
+			// 사용자 정보 업데이트
+			if (signedIn)
+			{
+				TitleScene.instance.LoginSucces();
+			}
 		}
 	}
 

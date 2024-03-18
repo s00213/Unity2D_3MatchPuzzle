@@ -19,23 +19,52 @@ public class RankBoard : MonoBehaviour
 	public TextMeshProUGUI rankBoardText;
 
 	void Start()
-    {
-		FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-		{
-			dependencyStatus = task.Result;
-			if (dependencyStatus == DependencyStatus.Available)
-			{
-				// Firebase 초기화 및 의존성 확인이 완료된 후에 DBreference 초기화
-				DBreference = Firebase.Database.FirebaseDatabase.DefaultInstance.RootReference;
+	{
+		//FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+		//{
+		//	dependencyStatus = task.Result;
+		//	if (dependencyStatus == DependencyStatus.Available)
+		//	{
+		//		// Firebase 초기화 및 의존성 확인이 완료된 후에 DBreference 초기화
+		//		DBreference = Firebase.Database.FirebaseDatabase.DefaultInstance.RootReference;
 
-				// DBreference가 올바르게 초기화된 후에 GetTopUsersByLevel() 호출
-				GetTopUsersByLevel();
-			}
-			else
-			{
-				Debug.LogError("Firebase 초기화 및 의존성 확인 실패");
-			}
-		});		
+		//		// DBreference가 올바르게 초기화된 후에 GetTopUsersByLevel() 호출
+		//		GetTopUsersByLevel();
+		//	}
+		//	else
+		//	{
+		//		Debug.LogError("Firebase 초기화 및 의존성 확인 실패");
+		//	}
+		//});
+
+		StartCoroutine(CheckAndFixDependenciesRoutine());
+	}
+
+	// FirebaseAuth 인스턴스 객체 설정
+	private void InitializeFirebase()
+	{
+		DBreference = FirebaseDatabase.DefaultInstance.RootReference;
+
+		GetTopUsersByLevel();
+	}
+
+	// Firebase 종속성을 체크하고 수정하는 코루틴
+	IEnumerator CheckAndFixDependenciesRoutine()
+	{
+		var checkAndFixDependenciesTask = FirebaseApp.CheckAndFixDependenciesAsync();
+
+		yield return new WaitUntil(predicate: () => checkAndFixDependenciesTask.IsCompleted);
+
+		var dependencyResult = checkAndFixDependenciesTask.Result;
+
+		if (dependencyResult == DependencyStatus.Available)
+		{
+			InitializeFirebase();
+		}
+		else
+		{
+			Debug.LogError("모든 Firebase 종속성을 해결할 수 없음 : " + dependencyStatus);
+		}
 	}
 
 	// Firebase에서 레벨별로 정렬된 상위 5명의 사용자 데이터를 가져옴
