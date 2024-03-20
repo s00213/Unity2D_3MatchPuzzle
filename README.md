@@ -7,7 +7,7 @@
 ## :crystal_ball: 개발 환경
 
 ```sh
-개발 기간 : 2024.03.05 ~ 2024.03.18 (14 일)
+개발 기간 : 2024.03.05 ~ 2024.03.18 (14일)
 인원 : 1인
 사용 툴 : Unity Engine 2021.3, Visual Studio 2022, Git, Github, Firebase
 ```
